@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Propuesta Curricular SWE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          magenta: { DEFAULT: '#E6007E', soft: '#FF4FA8', deep: '#B00062' },
+          ink: { DEFAULT: '#0E1324', 2: '#3B4257', 3: '#6B7287' },
+          mist: '#F6F5FA',
+          cyan: { brand: '#00B4D8' },
+          violet: { brand: '#7B5CFF' }
+        },
+        fontFamily: { heading: ['Poppins', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+      }
+    }
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background: #F6F5FA; }
+  .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .reveal-d1 { transition-delay: .08s; } .reveal-d2 { transition-delay: .16s; } .reveal-d3 { transition-delay: .24s; } .reveal-d4 { transition-delay: .32s; }
+  .bar { width: 0; transition: width 1.4s cubic-bezier(.2,.7,.2,1); }
+  .js .grow { transform: scaleX(0); transform-origin: left; transition: transform 1.3s cubic-bezier(.2,.7,.2,1) .2s; }
+  .js .in .grow, .js .in.grow { transform: none; }
+  .js .growY { transform: scaleY(0); transform-origin: bottom; transition: transform 1.2s cubic-bezier(.2,.7,.2,1) .2s; }
+  .js .in .growY { transform: none; }
+  .grid-bg {
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%);
+  }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.12); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-50px,30px) scale(1.08); } }
+  .blob1 { animation: drift 16s ease-in-out infinite; }
+  .blob2 { animation: drift2 20s ease-in-out infinite; }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  .shimmer-text { background: linear-gradient(90deg, #fff 0%, #FF9ACB 25%, #fff 50%, #9EE7F5 75%, #fff 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 8s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -28; } }
+  .flow { stroke-dasharray: 6 8; animation: dash 1.2s linear infinite; }
+  @keyframes pulse-ring { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(1.35); opacity: 0; } }
+  .ring { transform-box: fill-box; transform-origin: center; animation: pulse-ring 2.6s ease-out infinite; }
+  .acc-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1); }
+  .acc-body > div { overflow: hidden; }
+  .acc.open .acc-body { grid-template-rows: 1fr; }
+  .acc .chev { transition: transform .4s; }
+  .acc.open .chev { transform: rotate(180deg); }
+  .js .sk-clip { transform: scaleX(0); transition: transform 1.8s cubic-bezier(.2,.7,.2,1) .2s; }
+  .js .in .sk-clip { transform: none; }
+  .sk-link { transition: opacity .3s; }
+  .sk.hover .sk-link { opacity: .08 !important; }
+  .sk.hover .sk-link.on { opacity: .8 !important; }
+  .sk-node { cursor: pointer; }
+  .nav-link.active { color: #E6007E; }
+  .nav-link.active::after { transform: scaleX(1); }
+  .nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: #E6007E; transform: scaleX(0); transition: transform .3s; border-radius: 2px; }
+  .js .draw .d { stroke-dasharray: 700; stroke-dashoffset: 700; transition: stroke-dashoffset 1.8s cubic-bezier(.2,.7,.2,1) .3s; }
+  .js .draw.in .d { stroke-dashoffset: 0; }
+  .step { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s; }
+  .step:hover { transform: translateY(-4px); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .bar, .grow, .growY, .blob1, .blob2, .shimmer-text, .flow, .ring, .sk-clip, .d { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; stroke-dashoffset: 0 !important; }
+  }
+  @media print {
+    nav, .no-print { display: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .acc-body { grid-template-rows: 1fr !important; }
+  }
+  .js .venn .vA { transform: translateX(-90px); opacity: 0; transition: transform 1.2s cubic-bezier(.2,.7,.2,1), opacity 1s; }
+  .js .venn .vB { transform: translateX(90px); opacity: 0; transition: transform 1.2s cubic-bezier(.2,.7,.2,1), opacity 1s; }
+  .js .venn .vC, .js .venn .vt { opacity: 0; transition: opacity .8s ease .9s; }
+  .js .venn .vt { transition-duration: .6s; }
+  .js .in .venn .vA, .js .in .venn .vB { transform: none; opacity: 1; }
+  .js .in .venn .vC, .js .in .venn .vt { opacity: 1; }
+  details summary::-webkit-details-marker { display: none; }
+</style>
+</head>
+<body class="text-ink font-sans antialiased">
+
+<nav class="fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div id="navInner" class="mt-3 flex items-center justify-between rounded-2xl px-4 sm:px-5 py-3 transition-all duration-500">
+      <a href="#top" class="flex items-center gap-2.5">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-magenta to-violet-brand grid place-items-center">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        </span>
+        <span id="brand" class="font-heading font-bold text-sm text-white transition-colors">Propuesta Curricular</span>
+      </a>
+      <div id="links" class="hidden lg:flex items-center gap-6 text-[13px] font-semibold text-white/80 transition-colors">
+        <a href="#marco" class="nav-link relative">Marco</a>
+        <a href="#diagnostico" class="nav-link relative">Diagnóstico</a>
+        <a href="#version-a" class="nav-link relative">Versión A</a>
+        <a href="#version-b" class="nav-link relative">Versión B</a>
+        <a href="#web-sql" class="nav-link relative">Web y SQL</a>
+        <a href="#comparativo" class="nav-link relative">Comparativo</a>
+        <a href="#ruta" class="nav-link relative">Ruta</a>
+      </div>
+    </div>
+  </div>
+  <div class="h-[2px]"><div id="progress" class="h-full bg-gradient-to-r from-magenta via-violet-brand to-cyan-brand w-0"></div></div>
+</nav>
+
+<header id="top" class="relative overflow-hidden bg-ink text-white">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="blob1 absolute -top-40 -left-32 w-[520px] h-[520px] rounded-full bg-magenta/30 blur-[120px]"></div>
+  <div class="blob2 absolute -bottom-48 right-0 w-[560px] h-[560px] rounded-full bg-violet-brand/25 blur-[130px]"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-36 pb-24">
+    <div class="flex flex-wrap gap-2 mb-6 reveal">
+      <span class="text-[10px] font-bold tracking-[.18em] uppercase bg-magenta/20 text-magenta-soft px-3 py-1.5 rounded-full">Cualificación 4-INCO-SWE-001</span>
+      <span class="text-[10px] font-bold tracking-[.18em] uppercase bg-white/10 px-3 py-1.5 rounded-full">MNC Nivel 4</span>
+      <span class="text-[10px] font-bold tracking-[.18em] uppercase bg-white/10 px-3 py-1.5 rounded-full">Octubre 2026</span>
+      <span class="text-[10px] font-bold tracking-[.18em] uppercase bg-amber-400/20 text-amber-300 px-3 py-1.5 rounded-full ring-1 ring-amber-300/40">Versión beta</span>
+    </div>
+    <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] max-w-4xl reveal reveal-d1">
+      Actualización curricular del programa <span class="shimmer-text">Desarrollo de Software</span>
+    </h1>
+    <p class="mt-6 text-white/70 text-base sm:text-lg max-w-3xl leading-relaxed reveal reveal-d2">
+      Cada submódulo toma el nombre de su competencia específica del estándar
+      <em class="not-italic text-white">"Manejo de herramientas para codificación de software"</em>. Se presentan dos versiones de contenido:
+      una adaptación de las materias vigentes y un rediseño orientado a desarrollo web, SQL, automatización, AI Skills, MCP,
+      laboratorios virtuales y pensamiento sistémico.
+    </p>
+    <div class="mt-8 max-w-3xl reveal reveal-d3 flex gap-4 items-start rounded-2xl bg-white/[.06] border border-white/15 p-4 sm:p-5">
+      <span class="shrink-0 w-1 self-stretch rounded-full bg-gradient-to-b from-amber-300 to-magenta"></span>
+      <div class="text-sm leading-relaxed">
+        <p class="text-white/85"><b class="text-white">Versión beta de la propuesta</b> realizada por <b class="text-white">Mg. Juan José Gallego Mesa</b>.</p>
+        <p class="text-white/60 mt-1">Las tecnologías propuestas quedan a disposición de la revisión del colectivo docente y de los actores del proceso de formación. Sus observaciones se incorporan en la siguiente versión.</p>
+      </div>
+    </div>
+    <div class="mt-10 flex flex-wrap gap-3 reveal reveal-d3">
+      <a href="#version-a" class="group inline-flex items-center gap-2 bg-white text-ink font-semibold text-sm px-5 py-3 rounded-xl hover:-translate-y-0.5 transition">
+        Versión A · Adaptación
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#version-b" class="group inline-flex items-center gap-2 bg-gradient-to-r from-magenta to-violet-brand text-white font-semibold text-sm px-5 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-[0_10px_40px_-10px_rgba(230,0,126,.8)] transition">
+        Versión B · Rediseño
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
+      <div class="reveal reveal-d1 rounded-2xl border border-white/10 bg-white/[.04] backdrop-blur p-5">
+        <div class="font-heading font-bold text-3xl"><span data-count="9">9</span><span class="text-white/40 mx-1.5">→</span><span data-count="5">5</span></div>
+        <div class="text-[11px] uppercase tracking-wider text-white/50 mt-1">Materias a submódulos</div>
+      </div>
+      <div class="reveal reveal-d2 rounded-2xl border border-white/10 bg-white/[.04] backdrop-blur p-5">
+        <div class="font-heading font-bold text-3xl" data-count="1824" data-sep="1">1.824</div>
+        <div class="text-[11px] uppercase tracking-wider text-white/50 mt-1">Horas de formación</div>
+      </div>
+      <div class="reveal reveal-d3 rounded-2xl border border-white/10 bg-white/[.04] backdrop-blur p-5">
+        <div class="font-heading font-bold text-3xl" data-count="38">38</div>
+        <div class="text-[11px] uppercase tracking-wider text-white/50 mt-1">Créditos</div>
+      </div>
+      <div class="reveal reveal-d4 rounded-2xl border border-white/10 bg-white/[.04] backdrop-blur p-5">
+        <div class="font-heading font-bold text-3xl" data-count="30">30</div>
+        <div class="text-[11px] uppercase tracking-wider text-white/50 mt-1">Resultados de aprendizaje</div>
+      </div>
+      <div class="reveal reveal-d4 col-span-2 md:col-span-1 rounded-2xl border border-white/10 bg-white/[.04] backdrop-blur p-5">
+        <div class="font-heading font-bold text-3xl" data-count="528">528</div>
+        <div class="text-[11px] uppercase tracking-wider text-white/50 mt-1">Horas en centro de trabajo</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="marco" class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+  <div class="max-w-3xl reveal">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta">01 · Nuevo marco</p>
+    <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Cinco competencias, cinco submódulos, un ciclo</h2>
+    <p class="mt-5 text-ink-2 leading-relaxed">El estándar recorre el ciclo completo del entorno de programación. Cada competencia específica es un submódulo y conserva su nombre oficial en ambas versiones; lo que cambia entre la Versión A y la B es el contenido con el que se desarrolla.</p>
+  </div>
+  <div class="mt-12 reveal draw rounded-3xl bg-white border border-gray-100 p-4 sm:p-8 overflow-x-auto">
+    <svg viewBox="0 0 1000 210" class="w-full min-w-[680px]" role="img" aria-label="Ciclo de las cinco competencias específicas">
+      <defs>
+        <linearGradient id="gCycle" x1="0" x2="1"><stop offset="0" stop-color="#E6007E"/><stop offset=".5" stop-color="#7B5CFF"/><stop offset="1" stop-color="#00B4D8"/></linearGradient>
+      </defs>
+      <line x1="100" y1="80" x2="900" y2="80" stroke="#ECEAF3" stroke-width="10" stroke-linecap="round"/>
+      <line class="d" x1="100" y1="80" x2="900" y2="80" stroke="url(#gCycle)" stroke-width="4" stroke-linecap="round"/>
+      <line class="flow" x1="100" y1="80" x2="900" y2="80" stroke="#fff" stroke-width="2" opacity=".9"/>
+      <g id="cycleNodes"></g>
+    </svg>
+  </div>
+  <div class="mt-6 grid lg:grid-cols-12 gap-6">
+    <figure class="lg:col-span-5 reveal rounded-3xl bg-ink text-white p-7 relative overflow-hidden">
+      <div class="absolute -right-16 -bottom-16 w-56 h-56 rounded-full bg-magenta/25 blur-3xl"></div>
+      <figcaption class="text-[10px] font-bold tracking-[.18em] uppercase text-magenta-soft mb-3">Competencia general</figcaption>
+      <blockquote class="font-medium leading-relaxed relative">Manejar herramientas de codificación de software teniendo en cuenta las características técnicas y tecnológicas, la configuración, el uso del entorno de programación y la ejecución de código que garanticen el alistamiento de los recursos de programación de software.</blockquote>
+      <div class="mt-6 grid grid-cols-2 gap-3 text-sm relative">
+        <div class="rounded-xl bg-white/[.06] p-3"><div class="text-white/50 text-[10px] uppercase tracking-wider">Ocupación</div><div class="font-semibold mt-1">CIUO 3512 · CNO 2331</div></div>
+        <div class="rounded-xl bg-white/[.06] p-3"><div class="text-white/50 text-[10px] uppercase tracking-wider">Certificado</div><div class="font-semibold mt-1">Técnico laboral</div></div>
+      </div>
+    </figure>
+    <div class="lg:col-span-7 space-y-2.5" id="ceList"></div>
+  </div>
+</section>
+
+<section id="diagnostico" class="bg-white border-y border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+    <div class="max-w-3xl reveal">
+      <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta">02 · Diagnóstico</p>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Lo que dicen el observatorio y las empresas</h2>
+      <p class="mt-5 text-ink-2 leading-relaxed">Testeo con 8 empresas del sector TI (CESDE–Comfama, 2026), informe del panel de expertos sectoriales (Sura, Globant, Comfama, Cyclops, entre otros) y Estudio de Empleabilidad y Talento Digital Colombia 2025 (Cenisoft).</p>
+    </div>
+    <div class="mt-12 grid md:grid-cols-2 gap-5">
+      <div class="reveal rounded-3xl bg-ink text-white p-8 relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-magenta/25 blur-3xl"></div>
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-magenta-soft">Hallazgo clave · Testeo empresarial</p>
+        <p class="font-heading font-semibold text-2xl mt-4 leading-snug relative">"El diferencial del junior ya no es cuánto sabe programar, sino qué tan rápido entiende, aprende y resuelve."</p>
+      </div>
+      <div class="reveal reveal-d1 rounded-3xl bg-gradient-to-br from-magenta to-violet-brand text-white p-8 relative overflow-hidden">
+        <div class="absolute -left-10 -bottom-20 w-56 h-56 rounded-full bg-white/15 blur-3xl"></div>
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/70">Diagnóstico · Panel de expertos</p>
+        <p class="font-heading font-semibold text-2xl mt-4 leading-snug relative">El rol evoluciona de "codificador manual" a "habilitador tecnológico" que usa IA para acelerar la producción y comprende el negocio.</p>
+      </div>
+    </div>
+    <div class="mt-5 grid lg:grid-cols-3 gap-5">
+      <div class="reveal rounded-3xl border border-gray-100 bg-mist p-7">
+        <h3 class="font-heading font-bold text-lg">Brechas del perfil junior</h3>
+        <p class="text-xs text-ink-3 mt-1">Testeo con 8 empresas TI de Antioquia</p>
+        <div id="brechas" class="mt-6 space-y-4"></div>
+      </div>
+      <div class="reveal reveal-d1 rounded-3xl border border-gray-100 bg-mist p-7">
+        <h3 class="font-heading font-bold text-lg">Enfoques más demandados</h3>
+        <p class="text-xs text-ink-3 mt-1">Cenisoft 2025 · 310.000 vacantes analizadas</p>
+        <div id="demanda" class="mt-6 space-y-3.5"></div>
+      </div>
+      <div class="reveal reveal-d2 rounded-3xl border border-gray-100 bg-mist p-7">
+        <h3 class="font-heading font-bold text-lg">Semáforo por materia actual</h3>
+        <p class="text-xs text-ink-3 mt-1">Panel de expertos y valoración del testeo</p>
+        <div id="semaforo" class="mt-6 space-y-2.5"></div>
+        <div class="mt-5 flex flex-wrap gap-3 text-[10px] text-ink-3">
+          <span class="flex items-center gap-1.5"><i class="w-2 h-2 rounded-full bg-emerald-500"></i>Vigente</span>
+          <span class="flex items-center gap-1.5"><i class="w-2 h-2 rounded-full bg-amber-400"></i>Ajustar</span>
+          <span class="flex items-center gap-1.5"><i class="w-2 h-2 rounded-full bg-violet-brand"></i>En debate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="version-a" class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+  <div class="grid lg:grid-cols-12 gap-8 items-end">
+    <div class="lg:col-span-7 reveal">
+      <p class="text-[11px] font-bold tracking-[.2em] uppercase text-cyan-brand">03 · Versión A</p>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Adaptación de las materias actuales</h2>
+      <p class="mt-5 text-ink-2 leading-relaxed">Conserva el stack que el panel valida en verde (lógica, SQL, Java, Spring Boot, JavaScript, Python), lo redistribuye en los cinco submódulos e incorpora los ajustes que piden las empresas: Clean Code, auditoría de código con IA, GitFlow, agilismo con herramientas reales y máquinas virtuales para los laboratorios.</p>
+    </div>
+    <div class="lg:col-span-5 reveal reveal-d1 grid grid-cols-3 gap-3" id="kpiA"></div>
+  </div>
+
+  <div class="mt-12 reveal draw rounded-3xl bg-white border border-gray-100 p-5 sm:p-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Mapa del programa · Versión A</p>
+        <h3 class="font-heading font-bold text-xl mt-1">Lo que el estudiante construye en los 5 submódulos</h3>
+        <p class="text-sm text-ink-3 mt-1 max-w-3xl">Las piezas que hoy existen en el plan: frontend, backend, base de datos, agilismo y analítica, reorganizadas en los cinco submódulos. Cada etiqueta indica dónde se construye cada pieza.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 text-[11px] text-ink-2" data-sublegend="light"></div>
+    </div>
+    <div class="mt-6 overflow-x-auto">
+      <svg viewBox="0 0 1000 580" class="w-full min-w-[780px]" role="img" aria-label="Mapa de lo que construye el estudiante en la Versión A">
+        <defs>
+          <marker id="arrK" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7287"/></marker>
+        </defs>
+        <rect x="10" y="10" width="980" height="560" rx="22" fill="none" stroke="#CBD5E1" stroke-dasharray="6 6"/>
+        <text x="34" y="40" fill="#6B7287" font-size="12" font-weight="700" letter-spacing="1.5">PROYECTO DEL ESTUDIANTE · VERSIÓN A</text>
+        <g font-size="14" font-weight="700" fill="#0E1324">
+          <rect x="34" y="56" width="296" height="64" rx="14" fill="#64748B" fill-opacity=".1" stroke="#94A3B8"/>
+          <text x="54" y="82">Entornos de desarrollo</text><text x="54" y="102" font-size="11" font-weight="400" fill="#3B4257">PSeInt · VS Code · IntelliJ</text>
+          <rect x="352" y="56" width="296" height="64" rx="14" fill="#64748B" fill-opacity=".1" stroke="#94A3B8"/>
+          <text x="372" y="82">Máquinas virtuales</text><text x="372" y="102" font-size="11" font-weight="400" fill="#3B4257">VirtualBox · WSL2 · instalación de motores</text>
+          <rect x="670" y="56" width="296" height="64" rx="14" fill="#A8A29E" fill-opacity=".14" stroke="#A8A29E"/>
+          <text x="690" y="82">Gestión ágil</text><text x="690" y="102" font-size="11" font-weight="400" fill="#3B4257">Jira o Trello · historias de usuario</text>
+        </g>
+        <g data-b="S1 S4" data-at="258,66"></g><g data-b="S2" data-at="610,66"></g><g data-b="S3" data-at="928,66"></g>
+
+        <rect x="34" y="140" width="616" height="262" rx="18" fill="#E6007E" fill-opacity=".04" stroke="#E6007E" stroke-opacity=".4"/>
+        <text x="54" y="164" fill="#B00062" font-size="11" font-weight="700" letter-spacing="1.3">APLICACIÓN WEB DEL PROYECTO</text>
+        <g font-size="14" font-weight="700" fill="#0E1324">
+          <rect x="54" y="180" width="180" height="92" rx="14" fill="#E6007E" fill-opacity=".12"/>
+          <text x="72" y="208">Frontend</text><text x="72" y="230" font-size="11" font-weight="400" fill="#3B4257">HTML · CSS · Tailwind</text><text x="72" y="248" font-size="11" font-weight="400" fill="#3B4257">JavaScript · fetch</text>
+          <rect x="252" y="180" width="180" height="92" rx="14" fill="#7B5CFF" fill-opacity=".14"/>
+          <text x="270" y="208">API REST</text><text x="270" y="230" font-size="11" font-weight="400" fill="#3B4257">Java · Spring Boot</text><text x="270" y="248" font-size="11" font-weight="400" fill="#3B4257">DTO · Swagger</text>
+          <rect x="450" y="180" width="180" height="92" rx="14" fill="#00B4D8" fill-opacity=".14"/>
+          <text x="468" y="208">Base de datos</text><text x="468" y="230" font-size="11" font-weight="400" fill="#3B4257">SQL Server · MySQL</text><text x="468" y="248" font-size="11" font-weight="400" fill="#3B4257">procedimientos almacenados</text>
+          <rect x="54" y="300" width="180" height="80" rx="14" fill="#7B5CFF" fill-opacity=".08" stroke="#7B5CFF" stroke-opacity=".3"/>
+          <text x="72" y="326">Lógica</text><text x="72" y="348" font-size="11" font-weight="400" fill="#3B4257">algoritmos y pseudocódigo</text>
+          <rect x="252" y="300" width="180" height="80" rx="14" fill="#7B5CFF" fill-opacity=".08" stroke="#7B5CFF" stroke-opacity=".3"/>
+          <text x="270" y="326">Negocio en Java</text><text x="270" y="348" font-size="11" font-weight="400" fill="#3B4257">POO · Maven · JPA</text>
+          <rect x="450" y="300" width="180" height="80" rx="14" fill="#7B5CFF" fill-opacity=".08" stroke="#7B5CFF" stroke-opacity=".3"/>
+          <text x="468" y="326">Pruebas</text><text x="468" y="348" font-size="11" font-weight="400" fill="#3B4257">JUnit · pytest · depuración</text>
+        </g>
+        <g data-b="S4" data-at="196,188"></g><g data-b="S5" data-at="394,188"></g><g data-b="S2" data-at="592,188"></g>
+        <g data-b="S1" data-at="196,308"></g><g data-b="S4" data-at="394,308"></g><g data-b="S5" data-at="592,308"></g>
+        <g stroke="#6B7287" stroke-width="1.6" fill="none">
+          <line class="d" x1="234" y1="226" x2="248" y2="226" marker-end="url(#arrK)"/>
+          <line class="d" x1="432" y1="226" x2="446" y2="226" marker-end="url(#arrK)"/>
+          <line class="d" x1="342" y1="300" x2="342" y2="276" marker-end="url(#arrK)"/>
+        </g>
+
+        <rect x="670" y="140" width="296" height="150" rx="18" fill="#00B4D8" fill-opacity=".06" stroke="#00B4D8" stroke-opacity=".5"/>
+        <text x="690" y="164" fill="#0284A8" font-size="11" font-weight="700" letter-spacing="1.3">ANALÍTICA DE DATOS</text>
+        <g font-size="13" font-weight="700" fill="#0E1324">
+          <rect x="690" y="178" width="256" height="44" rx="12" fill="#fff" stroke="#E5E7EB"/>
+          <text x="706" y="198">Python · Pandas</text><text x="706" y="213" font-size="10" font-weight="400" fill="#6B7287">análisis y reportes</text>
+          <rect x="690" y="232" width="256" height="44" rx="12" fill="#fff" stroke="#E5E7EB"/>
+          <text x="706" y="252">Power BI</text><text x="706" y="267" font-size="10" font-weight="400" fill="#6B7287">tableros para decisiones</text>
+        </g>
+        <g data-b="S5" data-at="906,191"></g><g data-b="S2" data-at="906,245"></g>
+        <path class="d" d="M630 210 C650 210 650 200 686 200" fill="none" stroke="#00B4D8" stroke-width="1.6" marker-end="url(#arrK)"/>
+
+        <rect x="670" y="306" width="296" height="96" rx="18" fill="#E6007E" fill-opacity=".06" stroke="#E6007E" stroke-opacity=".4"/>
+        <text x="690" y="334" fill="#0E1324" font-size="14" font-weight="700">Despliegue de la plataforma</text>
+        <text x="690" y="356" fill="#3B4257" font-size="11">Hosting · dominio · HTTPS</text>
+        <text x="690" y="374" fill="#3B4257" font-size="11">transferencia de archivos y pruebas</text>
+        <g data-b="S3" data-at="928,316"></g>
+        <path class="d" d="M650 300 C660 340 660 354 666 354" fill="none" stroke="#E6007E" stroke-opacity=".6" stroke-width="1.6" marker-end="url(#arrK)"/>
+
+        <rect x="34" y="422" width="932" height="60" rx="14" fill="#64748B" fill-opacity=".1" stroke="#94A3B8"/>
+        <text x="54" y="448" fill="#0E1324" font-size="14" font-weight="700">Git y GitHub con GitFlow</text>
+        <text x="54" y="468" fill="#3B4257" font-size="11">Versionamiento de todo el proyecto · ramas · pull requests · repositorios compartidos</text>
+        <g data-b="S3" data-at="928,432"></g>
+        <rect x="34" y="496" width="932" height="56" rx="14" fill="#F59E0B" fill-opacity=".12" stroke="#F59E0B" stroke-opacity=".6"/>
+        <text x="54" y="520" fill="#0E1324" font-size="14" font-weight="700">IA como copiloto y auditoría</text>
+        <text x="54" y="539" fill="#3B4257" font-size="11">Explicar algoritmos (S1) · detectar errores con copiloto (S4) · corregir y documentar código generado (S5)</text>
+        <g data-b="S1 S4 S5" data-at="860,506"></g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="mt-12 reveal rounded-3xl bg-white border border-gray-100 p-5 sm:p-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama A1</p>
+        <h3 class="font-heading font-bold text-xl mt-1">Flujo de horas: de 9 materias a 5 submódulos</h3>
+        <p class="text-sm text-ink-3 mt-1">El grosor de cada banda representa las horas que cada materia aporta. Pase el cursor sobre una materia o un submódulo.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 text-[11px] text-ink-2" id="legendA"></div>
+    </div>
+    <div class="mt-6 overflow-x-auto"><div id="sankeyA" class="min-w-[760px]"></div></div>
+  </div>
+
+  <div class="mt-6 grid lg:grid-cols-5 gap-6">
+    <div class="lg:col-span-3 reveal rounded-3xl bg-white border border-gray-100 p-6 sm:p-8">
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama A2</p>
+      <h3 class="font-heading font-bold text-xl mt-1">Pila tecnológica y submódulo donde se trabaja</h3>
+      <div class="mt-6 space-y-2.5" id="stackA"></div>
+    </div>
+    <div class="lg:col-span-2 reveal reveal-d1 rounded-3xl bg-white border border-gray-100 p-6 sm:p-8">
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama A3</p>
+      <h3 class="font-heading font-bold text-xl mt-1">IA como práctica transversal</h3>
+      <p class="text-sm text-ink-3 mt-1">Tres niveles de auditoría recomendados por el panel.</p>
+      <div class="mt-6 flex items-end gap-3 h-60 growY" id="ladderA"></div>
+    </div>
+  </div>
+
+  <div class="mt-14 reveal flex flex-wrap items-end justify-between gap-4">
+    <h3 class="font-heading font-bold text-2xl">Submódulos de la Versión A</h3>
+    <div class="flex flex-wrap gap-3 text-[11px] text-ink-2 legend-threads"></div>
+  </div>
+  <div id="modsA" class="mt-6 space-y-4"></div>
+</section>
+
+<section id="version-b" class="relative bg-ink text-white overflow-hidden">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="blob1 absolute top-20 -right-40 w-[480px] h-[480px] rounded-full bg-magenta/20 blur-[130px]"></div>
+  <div class="blob2 absolute bottom-0 -left-40 w-[480px] h-[480px] rounded-full bg-cyan-brand/15 blur-[130px]"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-24">
+    <div class="grid lg:grid-cols-12 gap-8 items-end">
+      <div class="lg:col-span-7 reveal">
+        <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta-soft">04 · Versión B</p>
+        <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Rediseño con contenidos nuevos</h2>
+        <p class="mt-5 text-white/70 leading-relaxed">Mismos nombres de submódulo, contenido nuevo y concentrado: la lógica y el modelamiento de problemas son la columna vertebral de los cinco submódulos, cada submódulo tiene un eje dominante y todos construyen un mismo proyecto para un cliente real. Python es el lenguaje principal (lógica, backend, automatización y MCP); el estudiante trabaja desde un laboratorio virtual sin instalar nada en su equipo y aprende a usar, configurar y crear AI Skills.</p>
+      </div>
+      <div class="lg:col-span-5 reveal reveal-d1 grid grid-cols-3 gap-3" id="kpiB"></div>
+    </div>
+
+    <div class="mt-12 reveal rounded-3xl bg-white/[.04] border border-white/10 p-5 sm:p-8">
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Diagrama B1</p>
+      <h3 class="font-heading font-bold text-xl mt-1">Hilos formativos que alimentan cada submódulo</h3>
+      <p class="text-sm text-white/60 mt-1">SQL, desarrollo web e IA atraviesan varios submódulos. Pase el cursor sobre un hilo.</p>
+      <div class="mt-6 overflow-x-auto"><div id="sankeyB" class="min-w-[760px]"></div></div>
+    </div>
+
+    <div class="mt-6 reveal draw rounded-3xl bg-white/[.04] border border-white/10 p-5 sm:p-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Mapa del programa · Versión B</p>
+          <h3 class="font-heading font-bold text-xl mt-1">Lo que el estudiante construye en los 5 submódulos</h3>
+          <p class="text-sm text-white/60 mt-1 max-w-3xl">Un solo producto, montado dentro del laboratorio virtual del curso y sin instalación nativa. Cada etiqueta indica el submódulo donde se construye esa pieza.</p>
+          <p class="mt-3 inline-flex items-center gap-2 text-[11px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-300/30 rounded-full px-3 py-1"><i class="w-1.5 h-1.5 rounded-full bg-amber-300"></i>Tecnologías en revisión: propuesta beta abierta a los aportes del colectivo y de los actores del proceso de formación.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 text-[11px] text-white/70" data-sublegend="dark"></div>
+      </div>
+      <div class="mt-6 overflow-x-auto">
+        <svg viewBox="0 0 1000 680" class="w-full min-w-[780px]" data-dark="1" role="img" aria-label="Mapa de lo que construye el estudiante en la Versión B">
+          <defs>
+            <marker id="arrW" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffffff" fill-opacity=".6"/></marker>
+            <marker id="arrM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#FF4FA8"/></marker>
+            <linearGradient id="gMcp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6007E"/><stop offset="1" stop-color="#7B5CFF"/></linearGradient>
+          </defs>
+          <rect x="10" y="10" width="980" height="660" rx="22" fill="none" stroke="#fff" stroke-opacity=".25" stroke-dasharray="6 6"/>
+          <text x="34" y="40" fill="#fff" fill-opacity=".55" font-size="12" font-weight="700" letter-spacing="1.5">EQUIPO DEL ESTUDIANTE · WINDOWS, MACOS O EQUIPO DE BAJO COSTO</text>
+          <g font-size="13" font-weight="600" fill="#fff">
+            <rect x="40" y="60" width="290" height="58" rx="14" fill="#64748B" fill-opacity=".35" stroke="#94A3B8" stroke-opacity=".6"/>
+            <text x="60" y="85">Máquina virtual</text><text x="60" y="104" font-size="11" font-weight="400" fill-opacity=".7">VirtualBox o Hyper-V · imagen Ubuntu</text>
+            <rect x="355" y="60" width="290" height="58" rx="14" fill="#64748B" fill-opacity=".35" stroke="#94A3B8" stroke-opacity=".6"/>
+            <text x="375" y="85">WSL2</text><text x="375" y="104" font-size="11" font-weight="400" fill-opacity=".7">Linux dentro de Windows</text>
+            <rect x="670" y="60" width="290" height="58" rx="14" fill="#64748B" fill-opacity=".35" stroke="#94A3B8" stroke-opacity=".6"/>
+            <text x="690" y="85">Entorno en la nube</text><text x="690" y="104" font-size="11" font-weight="400" fill-opacity=".7">GitHub Codespaces · solo navegador</text>
+          </g>
+          <g data-b="S2" data-at="290,70"></g><g data-b="S2" data-at="605,70"></g><g data-b="S2" data-at="920,70"></g>
+          <path class="d" d="M185 118 C185 140 500 132 500 152" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" marker-end="url(#arrW)"/>
+          <path class="d" d="M500 118 L500 152" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" marker-end="url(#arrW)"/>
+          <path class="d" d="M815 118 C815 140 500 132 500 152" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" marker-end="url(#arrW)"/>
+          <rect x="40" y="160" width="920" height="490" rx="20" fill="#00B4D8" fill-opacity=".07" stroke="#00B4D8" stroke-opacity=".55"/>
+          <text x="62" y="188" fill="#9EE7F5" font-size="12" font-weight="700" letter-spacing="1.5">LABORATORIO VIRTUAL DEL CURSO · DEV CONTAINER</text>
+          <text x="62" y="207" fill="#fff" fill-opacity=".6" font-size="11">Python · uv · Node.js · PostgreSQL · Git · misma configuración para todos los estudiantes</text>
+          <g data-b="S3" data-at="900,176"></g>
+          <rect x="66" y="228" width="250" height="118" rx="14" fill="#0E1324" stroke="#fff" stroke-opacity=".2"/>
+          <text x="86" y="256" fill="#fff" font-size="15" font-weight="700">VS Code</text>
+          <text x="86" y="278" fill="#fff" fill-opacity=".65" font-size="11">Editor · terminal · depurador</text>
+          <text x="86" y="296" fill="#C4B5FD" font-size="11" font-weight="600">Algoritmos del proyecto en Python</text>
+          <text x="86" y="314" fill="#fff" fill-opacity=".65" font-size="11">Navegador con DevTools</text>
+          <g data-b="S1" data-at="276,238"></g>
+          <rect x="66" y="364" width="250" height="148" rx="14" fill="#F59E0B" fill-opacity=".12" stroke="#F59E0B" stroke-opacity=".7"/>
+          <text x="86" y="392" fill="#FCD34D" font-size="15" font-weight="700">Agente de IA</text>
+          <text x="86" y="412" fill="#fff" fill-opacity=".65" font-size="11">Instrucciones y permisos del proyecto</text>
+          <g font-size="11" font-weight="600" fill="#0E1324">
+            <rect x="86" y="426" width="96" height="24" rx="12" fill="#FCD34D"/><text x="98" y="442">Skill: SQL</text>
+            <rect x="190" y="426" width="108" height="24" rx="12" fill="#FCD34D"/><text x="202" y="442">Skill: pruebas</text>
+            <rect x="86" y="458" width="128" height="24" rx="12" fill="#FCD34D"/><text x="98" y="474">Skill: despliegue</text>
+            <rect x="222" y="458" width="76" height="24" rx="12" fill="#FCD34D" fill-opacity=".5"/><text x="234" y="474">+ propias</text>
+          </g>
+          <g data-b="S3 S5" data-at="242,374"></g>
+          <line class="d" x1="191" y1="346" x2="191" y2="364" stroke="#fff" stroke-opacity=".4" stroke-width="1.5"/>
+          <rect x="360" y="228" width="74" height="284" rx="14" fill="url(#gMcp)"/>
+          <text x="397" y="360" fill="#fff" font-size="18" font-weight="800" text-anchor="middle">MCP</text>
+          <text x="397" y="380" fill="#fff" fill-opacity=".8" font-size="9" text-anchor="middle">Model Context</text>
+          <text x="397" y="392" fill="#fff" fill-opacity=".8" font-size="9" text-anchor="middle">Protocol</text>
+          <g data-b="S3" data-at="382,236"></g>
+          <path class="d" d="M316 438 L356 438" stroke="#FF4FA8" stroke-width="2" marker-end="url(#arrM)"/>
+          <g font-size="13" font-weight="600" fill="#fff">
+            <rect x="480" y="236" width="210" height="52" rx="12" fill="#00B4D8" fill-opacity=".2" stroke="#00B4D8"/>
+            <text x="498" y="259">Servidor PostgreSQL</text><text x="498" y="277" font-size="10" font-weight="400" fill-opacity=".7">consultas SQL y esquema</text>
+            <rect x="480" y="304" width="210" height="52" rx="12" fill="#fff" fill-opacity=".08" stroke="#fff" stroke-opacity=".35"/>
+            <text x="498" y="327">Servidor GitHub</text><text x="498" y="345" font-size="10" font-weight="400" fill-opacity=".7">issues, ramas, pull requests</text>
+            <rect x="480" y="372" width="210" height="52" rx="12" fill="#F59E0B" fill-opacity=".15" stroke="#F59E0B" stroke-opacity=".8"/>
+            <text x="498" y="395">Automatizaciones</text><text x="498" y="413" font-size="10" font-weight="400" fill-opacity=".7">n8n y scripts en Python</text>
+            <rect x="480" y="440" width="210" height="52" rx="12" fill="#10B981" fill-opacity=".2" stroke="#10B981"/>
+            <text x="498" y="463">Servidor MCP propio</text><text x="498" y="481" font-size="10" font-weight="400" fill-opacity=".7">escrito en Python por el estudiante</text>
+          </g>
+          <g data-b="S2" data-at="652,244"></g><g data-b="S3" data-at="652,312"></g><g data-b="S5" data-at="652,380"></g><g data-b="S5" data-at="652,448"></g>
+          <g stroke="#FF4FA8" stroke-width="1.6" fill="none" stroke-opacity=".9">
+            <path class="d" d="M434 262 L476 262" marker-end="url(#arrM)"/>
+            <path class="d" d="M434 330 L476 330" marker-end="url(#arrM)"/>
+            <path class="d" d="M434 398 L476 398" marker-end="url(#arrM)"/>
+            <path class="d" d="M434 466 L476 466" marker-end="url(#arrM)"/>
+          </g>
+          <rect x="730" y="228" width="206" height="284" rx="16" fill="#E6007E" fill-opacity=".08" stroke="#E6007E" stroke-opacity=".6"/>
+          <text x="748" y="252" fill="#FF9ACB" font-size="11" font-weight="700" letter-spacing="1.3">APLICACIÓN WEB</text>
+          <g font-size="13" font-weight="600" fill="#fff">
+            <rect x="748" y="266" width="170" height="50" rx="12" fill="#E6007E" fill-opacity=".35"/>
+            <text x="764" y="288">Frontend</text><text x="764" y="305" font-size="10" font-weight="400" fill-opacity=".75">Tailwind · TypeScript · React</text>
+            <rect x="748" y="346" width="170" height="50" rx="12" fill="#7B5CFF" fill-opacity=".4"/>
+            <text x="764" y="368">API REST</text><text x="764" y="385" font-size="10" font-weight="400" fill-opacity=".75">Python · FastAPI · Pydantic</text>
+            <rect x="748" y="426" width="170" height="50" rx="12" fill="#00B4D8" fill-opacity=".35"/>
+            <text x="764" y="448">Datos SQL</text><text x="764" y="465" font-size="10" font-weight="400" fill-opacity=".75">PostgreSQL · SQLAlchemy</text>
+          </g>
+          <g data-b="S4" data-at="880,274"></g><g data-b="S4" data-at="880,354"></g><g data-b="S2 S4" data-at="852,434"></g>
+          <g stroke="#fff" stroke-opacity=".55" stroke-width="1.6">
+            <line class="d" x1="833" y1="316" x2="833" y2="342" marker-end="url(#arrW)"/>
+            <line class="d" x1="833" y1="396" x2="833" y2="422" marker-end="url(#arrW)"/>
+          </g>
+          <path class="d" d="M690 262 C712 262 712 451 744 451" fill="none" stroke="#00B4D8" stroke-width="1.5"/>
+          <rect x="66" y="534" width="870" height="96" rx="14" fill="#fff" fill-opacity=".05" stroke="#fff" stroke-opacity=".2"/>
+          <text x="86" y="558" fill="#fff" fill-opacity=".6" font-size="11" font-weight="700" letter-spacing="1.3">INTEGRACIÓN CONTINUA · GITHUB ACTIONS</text>
+          <g data-b="S3" data-at="896,544"></g>
+          <g font-size="12" font-weight="600" fill="#fff">
+            <rect x="86" y="574" width="180" height="38" rx="10" fill="#64748B" fill-opacity=".4"/><text x="104" y="598">Formato y linters</text>
+            <rect x="302" y="574" width="190" height="38" rx="10" fill="#7B5CFF" fill-opacity=".4"/><text x="320" y="598">Pruebas con pytest</text>
+            <rect x="528" y="574" width="180" height="38" rx="10" fill="#64748B" fill-opacity=".4"/><text x="546" y="598">Imagen Docker</text>
+            <rect x="744" y="574" width="176" height="38" rx="10" fill="#E6007E" fill-opacity=".45"/><text x="762" y="598">Despliegue web</text>
+          </g>
+          <g data-b="S5" data-at="454,584"></g>
+          <g stroke="#fff" stroke-opacity=".55" stroke-width="1.6">
+            <line class="d" x1="266" y1="593" x2="298" y2="593" marker-end="url(#arrW)"/>
+            <line class="d" x1="492" y1="593" x2="524" y2="593" marker-end="url(#arrW)"/>
+            <line class="d" x1="708" y1="593" x2="740" y2="593" marker-end="url(#arrW)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mt-6 reveal rounded-3xl bg-white/[.04] border border-white/10 p-5 sm:p-8">
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Diagrama B2</p>
+      <h3 class="font-heading font-bold text-xl mt-1">Un proyecto, cinco etapas</h3>
+      <p class="text-sm text-white/60 mt-1 max-w-3xl">Cada submódulo deja una pieza del mismo producto para un cliente real. El color indica el eje dominante del submódulo.</p>
+      <div id="projectB" class="mt-8 grid md:grid-cols-5 gap-4"></div>
+    </div>
+
+    <div class="mt-6 reveal rounded-3xl p-5 sm:p-8 border border-violet-brand/40 relative overflow-hidden" style="background:linear-gradient(135deg, rgba(123,92,255,.16), rgba(255,255,255,.03))">
+      <div class="absolute -left-24 -top-24 w-72 h-72 rounded-full bg-violet-brand/20 blur-3xl"></div>
+      <div class="relative flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Diagrama B5</p>
+          <h3 class="font-heading font-bold text-xl mt-1">Columna vertebral: lógica y modelamiento de problemas</h3>
+          <p class="text-sm text-white/60 mt-1 max-w-3xl">La lógica no se queda en el primer submódulo: en cada etapa el estudiante modela antes de codificar y deja un artefacto de modelamiento en el proyecto.</p>
+        </div>
+        <div class="flex gap-3" id="spineKpi"></div>
+      </div>
+      <div class="relative mt-10">
+        <div class="hidden md:block absolute left-[10%] right-[10%] top-[18px] h-1 rounded-full grow" style="background:linear-gradient(90deg,#7B5CFF,#B79BFF,#7B5CFF)"></div>
+        <div id="spineB" class="grid md:grid-cols-5 gap-4"></div>
+      </div>
+    </div>
+
+<div class="mt-6 grid lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-2 reveal rounded-3xl bg-white/[.04] border border-white/10 p-6 sm:p-8">
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Diagrama B3</p>
+        <h3 class="font-heading font-bold text-xl mt-1">Anatomía de una AI Skill</h3>
+        <p class="text-sm text-white/60 mt-1">Una Skill es un paquete de instrucciones, scripts y recursos que el agente carga solo cuando la tarea lo requiere. El estudiante aprende a usarlas, instalarlas y crearlas.</p>
+        <div class="mt-6 rounded-2xl bg-[#0B0F1C] border border-white/10 p-5 font-mono text-[13px] leading-7">
+          <div class="text-amber-300">revisar-consultas-sql/</div>
+          <div class="pl-5 flex justify-between gap-3"><span class="text-white">SKILL.md</span><span class="text-white/40 font-sans text-[11px]">nombre, descripción, pasos</span></div>
+          <div class="pl-5 text-cyan-300">scripts/</div>
+          <div class="pl-10 flex justify-between gap-3"><span class="text-white/80">explicar_plan.py</span><span class="text-white/40 font-sans text-[11px]">ejecuta EXPLAIN</span></div>
+          <div class="pl-5 text-cyan-300">recursos/</div>
+          <div class="pl-10 flex justify-between gap-3"><span class="text-white/80">buenas-practicas.md</span><span class="text-white/40 font-sans text-[11px]">criterios</span></div>
+          <div class="pl-10 flex justify-between gap-3"><span class="text-white/80">ejemplo.sql</span><span class="text-white/40 font-sans text-[11px]">plantilla</span></div>
+        </div>
+        <div class="mt-4 grid grid-cols-3 gap-2 text-center text-[11px]">
+          <div class="rounded-xl bg-white/[.06] p-3"><div class="font-heading font-bold text-sm">1</div>El agente lee la descripción</div>
+          <div class="rounded-xl bg-white/[.06] p-3"><div class="font-heading font-bold text-sm">2</div>Detecta que la tarea la necesita</div>
+          <div class="rounded-xl bg-white/[.06] p-3"><div class="font-heading font-bold text-sm">3</div>Carga pasos y scripts</div>
+        </div>
+      </div>
+      <div class="lg:col-span-3 reveal reveal-d1 rounded-3xl bg-white/[.04] border border-white/10 p-6 sm:p-8">
+        <p class="text-[10px] font-bold tracking-[.18em] uppercase text-white/50">Diagrama B4</p>
+        <h3 class="font-heading font-bold text-xl mt-1">Escalera de competencia en IA a lo largo del programa</h3>
+        <p class="text-sm text-white/60 mt-1">Del uso crítico de asistentes a la creación de Skills y servidores MCP propios.</p>
+        <div class="mt-8 flex items-end gap-2 sm:gap-3 h-72 growY" id="ladderB"></div>
+      </div>
+    </div>
+
+    <div class="mt-14 reveal flex flex-wrap items-end justify-between gap-4">
+      <h3 class="font-heading font-bold text-2xl">Submódulos de la Versión B</h3>
+      <div class="flex flex-wrap gap-3 text-[11px] text-white/70 legend-threads"></div>
+    </div>
+    <div id="modsB" class="mt-6 space-y-4"></div>
+
+    <div class="mt-16 reveal">
+      <h3 class="font-heading font-bold text-xl">Rutinas transversales de la Versión B</h3>
+      <p class="text-white/60 text-sm mt-1">No suman horas propias: son prácticas fijas que se exigen y evalúan en cada entrega del proyecto.</p>
+      <div id="transB" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+    </div>
+  </div>
+</section>
+
+<section id="web-sql" class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+  <div class="max-w-3xl reveal">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta">05 · Desarrollo web y SQL</p>
+    <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">¿Qué pasa con el desarrollo web y con SQL?</h2>
+    <p class="mt-5 text-ink-2 leading-relaxed">Ninguna de las dos versiones los pierde. El estándar no nombra la web ni las bases de datos, pero son el escenario natural para reconocer, configurar, usar y ejecutar un entorno de programación. En la Versión B el desarrollo web se concentra en un submódulo completo (el 4, de punta a punta con React y FastAPI) y SQL crece y se reparte en dos submódulos.</p>
+  </div>
+  <div class="mt-12 reveal rounded-3xl bg-white border border-gray-100 p-5 sm:p-8">
+    <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama W1</p>
+    <h3 class="font-heading font-bold text-xl mt-1">Ruta completa del desarrollo web en cada versión</h3>
+    <p class="text-sm text-ink-3 mt-1">Cada etapa indica el submódulo (S) y la unidad (U) donde se trabaja.</p>
+    <div class="mt-8 overflow-x-auto"><div id="webFlow" class="min-w-[880px]"></div></div>
+  </div>
+  <div class="mt-6 grid lg:grid-cols-5 gap-6">
+    <div class="lg:col-span-3 reveal rounded-3xl bg-white border border-gray-100 p-6 sm:p-8">
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama W2</p>
+      <h3 class="font-heading font-bold text-xl mt-1">Horas por hilo formativo: A frente a B</h3>
+      <div class="mt-2 flex gap-4 text-[11px] text-ink-2">
+        <span class="flex items-center gap-1.5"><i class="w-3 h-2 rounded-sm bg-ink-3/40"></i>Versión A</span>
+        <span class="flex items-center gap-1.5"><i class="w-3 h-2 rounded-sm bg-magenta"></i>Versión B (color del hilo)</span>
+      </div>
+      <div class="mt-6 space-y-4" id="threadBars"></div>
+    </div>
+    <div class="lg:col-span-2 reveal reveal-d1 rounded-3xl bg-ink text-white p-6 sm:p-8 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-cyan-brand/25 blur-3xl"></div>
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-cyan-300 relative">Diagrama W3</p>
+      <h3 class="font-heading font-bold text-xl mt-1 relative">SQL en la Versión B: cuatro momentos</h3>
+      <p class="text-sm text-white/60 mt-1 relative">SQL es base del perfil: las empresas valoran Bases de Datos en "alta" y la analítica es el enfoque más demandado (50 %).</p>
+      <div class="mt-6 space-y-3 relative" id="sqlSteps"></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparativo" class="bg-white border-y border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+    <div class="max-w-3xl reveal">
+      <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta">06 · Comparativo</p>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Dos caminos, un mismo marco</h2>
+      <p class="mt-5 text-ink-2 leading-relaxed">Ambas versiones cumplen las 1.824 horas, los 38 créditos y los 30 resultados de aprendizaje, con los mismos nombres de submódulo. Comparten un núcleo y se separan en el stack, en la concentración y en el peso de la lógica, la IA y la automatización.</p>
+    </div>
+
+    <div class="mt-12 reveal draw rounded-3xl bg-white border border-gray-100 p-5 sm:p-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama C1</p>
+          <h3 class="font-heading font-bold text-xl mt-1">El cruce: qué comparten y qué las diferencia</h3>
+          <p class="text-sm text-ink-3 mt-1 max-w-3xl">El centro es el núcleo común que permite empezar con A y migrar a B sin cambiar la estructura aprobada.</p>
+        </div>
+        <div class="flex flex-wrap gap-4 text-xs text-ink-2">
+          <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-cyan-brand"></i>Solo Versión A</span>
+          <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full" style="background:#7B5CFF"></i>Núcleo común</span>
+          <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-magenta"></i>Solo Versión B</span>
+        </div>
+      </div>
+      <div class="mt-6 overflow-x-auto">
+        <svg viewBox="0 0 1000 560" class="w-full min-w-[760px] venn" role="img" aria-label="Diagrama de Venn entre la Versión A y la Versión B">
+          <g class="vA"><circle cx="380" cy="300" r="250" fill="#00B4D8" fill-opacity=".13" stroke="#00B4D8" stroke-width="2"/></g>
+          <g class="vB"><circle cx="620" cy="300" r="250" fill="#E6007E" fill-opacity=".10" stroke="#E6007E" stroke-width="2"/></g>
+          <g class="vC">
+            <clipPath id="lensClip"><circle cx="620" cy="300" r="250"/></clipPath>
+            <circle cx="380" cy="300" r="250" fill="#7B5CFF" fill-opacity=".16" clip-path="url(#lensClip)"/>
+          </g>
+          <text x="170" y="30" font-family="Poppins" font-weight="700" font-size="17" fill="#0284A8">Versión A · Adaptación</text>
+          <text x="830" y="30" text-anchor="end" font-family="Poppins" font-weight="700" font-size="17" fill="#B00062">Versión B · Rediseño</text>
+          <text x="500" y="152" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="1.5" fill="#5B3FD9">NÚCLEO COMÚN</text>
+          <g id="vennText" font-size="13" font-family="Inter"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mt-6 reveal rounded-3xl bg-white border border-gray-100 p-5 sm:p-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3">Diagrama C2</p>
+          <h3 class="font-heading font-bold text-xl mt-1">Dónde se cruzan y dónde se separan, en horas</h3>
+          <p class="text-sm text-ink-3 mt-1 max-w-3xl">Cada línea une las horas de A y de B. El color indica qué versión pone más peso. A suma más horas de programación por el Java orientado a objetos; B pone más horas en lógica y modelamiento de problemas, que es lo que la IA no reemplaza.</p>
+        </div>
+        <div class="flex flex-wrap gap-4 text-xs text-ink-2">
+          <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-cyan-brand"></i>Versión A</span>
+          <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-magenta"></i>Versión B</span>
+        </div>
+      </div>
+      <div id="crossDumb" class="mt-8 space-y-5"></div>
+    </div>
+
+    <div class="mt-6 reveal grid md:grid-cols-3 gap-4" id="crossCards"></div>
+
+    <details class="mt-6 reveal group rounded-3xl border border-gray-100 bg-white">
+      <summary class="cursor-pointer list-none p-5 sm:px-8 flex items-center justify-between font-heading font-semibold">Tabla comparativa detallada<span class="text-magenta text-sm group-open:rotate-45 transition text-2xl leading-none">+</span></summary>
+      <div class="overflow-x-auto border-t border-gray-100">
+        <table class="w-full text-sm min-w-[720px]">
+          <thead class="bg-mist">
+            <tr class="text-left">
+              <th class="p-5 font-heading text-ink-3 text-xs uppercase tracking-wider w-1/4">Criterio</th>
+              <th class="p-5"><span class="inline-flex items-center gap-2 font-heading font-bold"><i class="w-2.5 h-2.5 rounded-full bg-cyan-brand"></i>Versión A · Adaptación</span></th>
+              <th class="p-5"><span class="inline-flex items-center gap-2 font-heading font-bold"><i class="w-2.5 h-2.5 rounded-full bg-magenta"></i>Versión B · Rediseño</span></th>
+            </tr>
+          </thead>
+          <tbody id="compBody" class="divide-y divide-gray-100"></tbody>
+        </table>
+      </div>
+    </details>
+
+    <div class="mt-8 reveal rounded-3xl bg-gradient-to-br from-ink to-[#1d2340] text-white p-8 relative overflow-hidden">
+      <div class="absolute -right-20 -bottom-20 w-72 h-72 rounded-full bg-magenta/25 blur-3xl"></div>
+      <p class="text-[10px] font-bold tracking-[.18em] uppercase text-magenta-soft">Recomendación</p>
+      <h3 class="font-heading font-bold text-2xl mt-3 relative">Adoptar la Versión B como meta y usar la Versión A como transición</h3>
+      <p class="mt-4 text-white/70 leading-relaxed relative max-w-4xl">El núcleo común hace posible la transición sin cambiar la estructura aprobada: la Versión A arranca con el equipo docente actual y, unidad por unidad, se reemplazan contenidos por los de la Versión B. Primero entra lo que no depende de infraestructura: lógica y modelamiento en los cinco submódulos y el reto de lógica semanal. Después llegan el laboratorio virtual, Python y FastAPI, y por último las Skills, el MCP y la automatización, hasta completar la migración en la cohorte siguiente.</p>
+      <div class="relative mt-6 flex flex-wrap items-center gap-2 text-xs font-semibold" id="migraSteps"></div>
+    </div>
+  </div>
+</section>
+
+<section id="ruta" class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
+  <div class="max-w-3xl reveal">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-magenta">07 · Ruta de implementación</p>
+    <h2 class="font-heading font-bold text-3xl sm:text-4xl mt-3 leading-tight">Próximos pasos</h2>
+  </div>
+  <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-5 gap-4" id="ruta-steps"></div>
+</section>
+
+</main>
+
+<footer class="bg-ink text-white/60">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-3 gap-8 text-xs leading-relaxed">
+    <div><p class="font-heading font-bold text-white text-sm">Fuentes</p><p class="mt-3">Estándar de cualificación 4-INCO-SWE-001 "Manejo de herramientas para codificación de software" (MNC nivel 4, 1.824 h, 38 créditos).</p></div>
+    <div><p class="md:mt-8">Observatorio Curricular CESDE: fichas de las 9 materias vigentes, testeo con 8 empresas TI (CESDE–Comfama, 2026) e informe del panel de expertos sectoriales.</p></div>
+    <div><p class="md:mt-8">Estudio de Empleabilidad y Talento Digital Colombia 2025 (Cenisoft); MinTIC y Fedesoft; Ruta N; DANE CUOC 2025. La distribución de horas por unidad es una propuesta para validación del comité.</p></div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <p><span class="font-bold tracking-[.14em] uppercase text-amber-300 mr-2">Versión beta</span>Propuesta realizada por <b class="text-white">Mg. Juan José Gallego Mesa</b> · Técnico Laboral en Desarrollo de Software · CESDE · Octubre 2026</p>
+      <p class="text-white/50 max-w-xl">Las tecnologías propuestas quedan a disposición de la revisión del colectivo docente y de los actores del proceso de formación.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ================= DATA ================= */
+const CE = [
+  { id: 'CE01', h: 288, c: 6, verbo: 'Reconocer', nombre: 'Reconocer los componentes funcionales del entorno de programación', comp: 'teniendo en cuenta la documentación y manuales de la herramienta',
+    ra: ['Asegurar la funcionalidad y componentes del entorno', 'Corroborar integridad y pertinencia (marco normativo y legal)', 'Categorizar los componentes de los módulos funcionales', 'Describir herramientas de navegación y optimización de código', 'Cotejar características de diferentes entornos', 'Valorar la compatibilidad económica, técnica y de recursos'] },
+  { id: 'CE02', h: 288, c: 6, verbo: 'Describir', nombre: 'Describir la compatibilidad técnica y tecnológica del entorno de desarrollo', comp: 'de acuerdo con las especificaciones de la documentación y manuales de la herramienta',
+    ra: ['Examinar la integridad de los medios de instalación', 'Constatar los requisitos de hardware', 'Certificar la compatibilidad con el sistema operativo', 'Fijar la configuración de seguridad (perfiles y permisos)', 'Chequear la estructura del código de programación', 'Determinar los lenguajes disponibles en el entorno'] },
+  { id: 'CE03', h: 384, c: 8, verbo: 'Configurar', nombre: 'Configurar el entorno de programación', comp: 'de acuerdo con los criterios técnicos',
+    ra: ['Confirmar los requerimientos de configuración', 'Comprobar el funcionamiento del instalador', 'Montar el entorno (librerías, permisos, repositorios)', 'Documentar las novedades de la instalación', 'Ejecutar pruebas de funcionamiento', 'Poner a punto la instancia instalada'] },
+  { id: 'CE04', h: 432, c: 9, verbo: 'Utilizar', nombre: 'Utilizar el entorno de programación', comp: 'según los criterios técnicos',
+    ra: ['Inspeccionar la interfaz gráfica del entorno', 'Incorporar los comandos del entorno', 'Utilizar el entorno según manual de usuario', 'Completar la ejecución de comandos con parámetros', 'Estructurar secuencias de interacción', 'Realizar secuencias de comandos de texto'] },
+  { id: 'CE05', h: 432, c: 9, verbo: 'Ejecutar', nombre: 'Ejecutar el código de programación del software', comp: 'teniendo en cuenta los criterios técnicos',
+    ra: ['Identificar el lenguaje y características del código', 'Reproducir código en el entorno', 'Adaptar el código según requisitos', 'Depurar según compilación y ejecución', 'Hacer pruebas sobre el código modificado', 'Corregir el código según resultados de pruebas'] }
+];
+
+const THREADS = {
+  prog:    { n: 'Lógica y programación', c: '#7B5CFF' },
+  sql:     { n: 'Bases de datos y SQL', c: '#00B4D8' },
+  web:     { n: 'Desarrollo web', c: '#E6007E' },
+  ia:      { n: 'IA y automatización', c: '#F59E0B' },
+  entorno: { n: 'Entornos y virtualización', c: '#64748B' },
+  gestion: { n: 'Gestión, ética y documentación', c: '#A8A29E' }
+};
+
+const LEVEL_C = { I: '#7B5CFF', II: '#00B4D8', III: '#E6007E', N: '#F59E0B' };
+const MATERIAS = [
+  { id: 'logica', n: 'Lógica de Programación', nivel: 'I', sem: 'verde', val: 'alta' },
+  { id: 'intro', n: 'Introducción a la Programación', nivel: 'I', sem: 'debate', val: 'media' },
+  { id: 'bd', n: 'Gestión de Bases de Datos', nivel: 'I', sem: 'amarillo', val: 'alta' },
+  { id: 'agiles', n: 'Metodologías Ágiles', nivel: 'II', sem: 'amarillo', val: 'media' },
+  { id: 'backend1', n: 'Backend I', nivel: 'II', sem: 'verde', val: 'media' },
+  { id: 'frontend1', n: 'Frontend I', nivel: 'II', sem: 'verde', val: 'media' },
+  { id: 'nuevastec', n: 'Nuevas Tecnologías', nivel: 'III', sem: 'verde', val: 'baja' },
+  { id: 'backend2', n: 'Backend II', nivel: 'III', sem: 'verde', val: 'media' },
+  { id: 'frontend2', n: 'Frontend II', nivel: 'III', sem: 'verde', val: 'media' }
+];
+const NUEVO = { id: 'nuevo', n: 'Contenido nuevo', nivel: 'N' };
+
+const BRECHAS = [
+  { n: 'Comprensión del negocio', l: 'Crítica', v: 100 }, { n: 'Pensamiento orientado a solución', l: 'Alta', v: 80 },
+  { n: 'Habilidades blandas', l: 'Alta', v: 80 }, { n: 'Uso estratégico de IA', l: 'Alta', v: 80 },
+  { n: 'Autonomía y aprendizaje continuo', l: 'Alta', v: 80 }, { n: 'Automatización e integración', l: 'Media', v: 55 }
+];
+const DEMANDA = [['Big Data y analítica', 50], ['IA y machine learning', 47], ['Computación en la nube', 43], ['IoT', 42], ['Ciberseguridad', 41], ['Desarrollo full-stack', 38], ['DevOps y SRE', 36], ['Diseño UX/UI', 32]];
+
+/* Unidad: [título, horas, [RA], hilo (string u objeto {hilo: horas}), origen (solo Versión A)] */
+const MODS_A = [
+  { enfasis: 'Lógica y entornos de programación',
+    desc: 'Integra la lógica de programación completa con el reconocimiento de los entornos donde se escribe el código: PSeInt como entorno didáctico y VS Code como entorno profesional. El estudiante aprende a leer la documentación de la herramienta y a compararla con otras.',
+    units: [
+      ['Anatomía del entorno: PSeInt y VS Code, paneles, módulos, extensiones y documentación oficial', 40, [1, 3], 'entorno', 'intro'],
+      ['Lógica secuencial, variables, constantes, operadores y pruebas de escritorio', 56, [1], 'prog', 'logica'],
+      ['Decisiones simples y múltiples, ciclos, contadores y acumuladores', 64, [3], 'prog', 'logica'],
+      ['Funciones, arreglos unidimensionales e introducción a clases', 56, [3], 'prog', 'logica'],
+      ['Navegación y optimización del código: búsqueda, refactorización, linters y Clean Code', 32, [4], 'entorno', 'logica'],
+      ['Comparación de entornos (PSeInt, VS Code, IntelliJ, DevTools), licencias y condiciones de uso', 40, [2, 5, 6], 'entorno', 'intro']
+    ],
+    keep: ['Lógica completa con pruebas de escritorio', 'Retos con contexto empresarial local'],
+    adjust: ['Clean Code desde el pseudocódigo', 'Auditoría de algoritmos con IA, nivel 1'],
+    drop: ['Maquetación HTML/CSS pasa al submódulo 4'],
+    ev: 'Documento de análisis de características del entorno y portafolio de algoritmos validados.' },
+  { enfasis: 'Compatibilidad, máquinas virtuales y bases de datos',
+    desc: 'Toma Gestión de Bases de Datos como columna y le suma la verificación de compatibilidad que exige la CE02. Los laboratorios se hacen en máquinas virtuales para practicar instalaciones sin afectar el equipo, y los motores de base de datos son el caso de estudio.',
+    units: [
+      ['Medios de instalación y requisitos de hardware: integridad, espacio, memoria y procesador', 32, [1, 2], 'entorno', 'nuevo'],
+      ['Sistemas operativos y máquinas virtuales: VirtualBox, WSL2, perfiles y permisos', 40, [3, 4], 'entorno', 'nuevo'],
+      ['Instalación y compatibilidad de motores: SQL Server, MySQL y MongoDB', 32, [2, 3], 'sql', 'bd'],
+      ['Modelo entidad-relación y normalización (1FN, 2FN, 3FN)', 48, [5], 'sql', 'bd'],
+      ['SQL: DDL, DML, DCL, joins, agregados y procedimientos almacenados', 80, [5], 'sql', 'bd'],
+      ['Lenguajes del entorno, SQL frente a NoSQL y analítica con Power BI', 56, [6], 'sql', 'bd']
+    ],
+    keep: ['Modelado, normalización y SQL', 'Procedimientos almacenados'],
+    adjust: ['Laboratorios en máquinas virtuales', 'Analítica aplicada a decisiones de negocio'],
+    drop: ['Profundidad en DCL avanzado'],
+    ev: 'Informe de validación de compatibilidad del entorno y base de datos implementada.' },
+  { enfasis: 'Configuración, versionamiento y despliegue',
+    desc: 'Reúne la configuración técnica de herramientas, el control de versiones (antes en Introducción), la documentación de procesos y la gestión ágil (antes en Metodologías Ágiles) y el montaje de plataformas web (antes en Frontend II).',
+    units: [
+      ['Requerimientos de configuración: versiones, tipos de instalación, licencias, puertos y red', 48, [1, 2], 'entorno', 'nuevo'],
+      ['Montaje del entorno: JDK, Node.js, Maven, IDE, librerías y perfiles de acceso', 64, [3], 'entorno', 'nuevo'],
+      ['Git y GitHub: repositorios compartidos, ramas, GitFlow y pull requests', 72, [3, 6], 'entorno', 'intro'],
+      ['Levantamiento de requisitos e historias de usuario', 64, [1], 'gestion', 'agiles'],
+      ['Gestión ágil con Jira o Trello y bitácora de instalación y hallazgos', 56, [4], 'gestion', 'agiles'],
+      ['Montaje de plataforma web: dominio, hosting, seguridad, transferencia y pruebas', 80, [5, 6], 'web', 'frontend2']
+    ],
+    keep: ['Requisitos y casos de uso', 'Montaje y despliegue de sitios'],
+    adjust: ['Agilismo con herramientas reales', 'GitFlow como estándar de equipo'],
+    drop: ['Teoría extensa de marcos ágiles', 'Bocetos y árboles de contenido'],
+    ev: 'Entorno de desarrollo instalado y configurado, y documento de hallazgos de la instalación.' },
+  { enfasis: 'Desarrollo web y Java en el entorno',
+    desc: 'Concentra el uso intensivo del entorno: interfaz del IDE, comandos y secuencias. Se construyen interfaces web con HTML, CSS y JavaScript y aplicaciones Java orientadas a objetos, operando el entorno con terminal y gestores de dependencias.',
+    units: [
+      ['Interfaz del IDE: paneles, menús, atajos y paleta de comandos (VS Code e IntelliJ)', 32, [1, 2], 'entorno', 'nuevo'],
+      ['Maquetación web: HTML5 semántico, CSS3, Flexbox, Grid y Tailwind', 64, [3], 'web', 'intro'],
+      ['JavaScript: tipos, control, funciones, arreglos, objetos, DOM y eventos', 96, [3, 5], 'web', 'frontend1'],
+      ['Consumo de API REST con fetch, promesas y async/await', 48, [5], 'web', 'frontend1'],
+      ['Java orientado a objetos: clases, herencia, polimorfismo e interfaces', 112, [4, 5], 'prog', 'backend1'],
+      ['Secuencias de comandos: terminal, Maven, npm, Git CLI y CRUD con JPA', 80, [6], 'entorno', 'backend1']
+    ],
+    keep: ['JavaScript y DOM', 'POO en Java con Maven y JPA'],
+    adjust: ['Programación en pares con copilotos de IA', 'Documentación oficial en inglés'],
+    drop: ['HTML/CSS pasa de materia completa a unidad'],
+    ev: 'Secuencias de interacción y de comandos ejecutadas, con aplicación web y Java funcionales.' },
+  { enfasis: 'Ejecución, depuración y pruebas',
+    desc: 'Cierra el ciclo con la ejecución profesional del código: leer, reproducir, adaptar, depurar, probar y corregir. La API REST con Spring Boot y Python con análisis de datos son los escenarios de práctica.',
+    units: [
+      ['Lectura de código: identificar lenguaje, sintaxis y librerías (Java, Python, JavaScript)', 40, [1], 'prog', 'nuevo'],
+      ['Reproducción de código en Python: estructuras nativas y ambientes virtuales', 72, [2], 'prog', 'nuevastec'],
+      ['API REST con Spring Boot: capas, JPA, DTO, validación y Swagger', 112, [3], 'web', 'backend2'],
+      ['Depuración: puntos de interrupción, ejecución paso a paso y lectura de trazas', 56, [4], 'prog', 'backend2'],
+      ['Pruebas con JUnit y pytest: datos de prueba y resultados esperados', 72, [5], 'prog', 'backend2'],
+      ['Pandas y fundamentos de IA; corrección guiada por resultados', 80, [6], 'ia', 'nuevastec']
+    ],
+    keep: ['Spring Boot como framework principal', 'Python y Pandas'],
+    adjust: ['Auditoría de código generado por IA', 'Introducción a CI/CD y nube'],
+    drop: ['IA como tema aislado'],
+    ev: 'Código transcrito, adaptado, depurado y probado de acuerdo con requisitos.' }
+];
+
+const MODS_B = [
+  { tags: ['Lógica y modelamiento', 'Python desde el día uno', 'Pensamiento sistémico'],
+    pieza: 'Modelo del problema del cliente (diagramas, pseudocódigo) y algoritmos núcleo en Python.',
+    desc: 'Submódulo de lógica y modelamiento: antes de escribir código, el estudiante entiende el problema del cliente, lo descompone como un sistema y lo modela con diagramas de flujo y pseudocódigo. Luego lo resuelve con algoritmos en Python validados con pruebas de escritorio y con el depurador. En paralelo reconoce los módulos de su entorno y compara opciones locales, virtuales y en la nube.',
+    why: 'Lógica es la materia mejor valorada ("si se entiende la lógica se van a entender muchas cosas"); comprensión del negocio es la brecha crítica y pensamiento orientado a solución es brecha alta. Si la IA resuelve la sintaxis, lo diferencial es modelar el problema.',
+    units: [
+      ['Pensamiento sistémico y computacional: descomposición, abstracción, patrones y el problema del cliente como sistema', 40, [1], 'prog'],
+      ['Modelamiento de problemas: requisitos, entradas y salidas, casos, diagramas de flujo y pseudocódigo', 48, [1, 3], 'prog'],
+      ['Lógica en Python: variables, operadores, decisiones y ciclos con pruebas de escritorio y depurador', 72, [3, 4], 'prog'],
+      ['Estructuras de datos y algoritmos: funciones, listas, diccionarios, búsqueda, ordenamiento y eficiencia', 56, [3, 4], 'prog'],
+      ['Anatomía del entorno: VS Code, extensiones, terminal, depurador, DevTools y asistente de IA', 40, [1, 3, 4], 'entorno'],
+      ['Comparación de entornos (local, virtual, nube), licencias, Ley 1581 y uso responsable de IA', 32, [2, 5, 6], 'gestion']
+    ],
+    ev: 'Análisis comparativo de entornos con concepto técnico y algoritmos del proyecto validados.' },
+  { tags: ['SQL', 'PostgreSQL', 'Máquinas virtuales', 'WSL2'],
+    pieza: 'Base de datos del proyecto modelada en PostgreSQL y montada en su máquina virtual.',
+    desc: 'Submódulo de datos: el estudiante modela los datos del problema del cliente antes de crear tablas, domina SQL en PostgreSQL y la consulta desde Python. La compatibilidad se aprende sobre plataformas virtuales: monta su máquina virtual o WSL2, valida requisitos de hardware y sistema operativo y usa contenedores. Nadie instala de forma nativa.',
+    why: 'Big Data y analítica es el enfoque más demandado (50 %) y Bases de Datos es "alta" en el testeo. La virtualización elimina las diferencias de equipos entre estudiantes.',
+    units: [
+      ['Máquinas virtuales y WSL2: requisitos de hardware, sistema operativo, perfiles y permisos', 56, [1, 2, 3, 4], 'entorno'],
+      ['Contenedores y nube: Docker y GitHub Codespaces para validar compatibilidad', 24, [3], 'entorno'],
+      ['Modelamiento de datos: del problema del cliente al modelo entidad-relación y la normalización', 64, [5], 'sql'],
+      ['SQL I en PostgreSQL: DDL, DML, consultas, joins, agregaciones y vistas', 96, [5], 'sql'],
+      ['Resolver problemas con SQL y Python: consultas parametrizadas, carga y transformación de datos', 48, [5, 6], { sql: 32, prog: 16 }]
+    ],
+    ev: 'Informe de compatibilidad validado y base de datos del proyecto en una máquina virtual o contenedor.' },
+  { tags: ['Laboratorio virtual', 'Git y GitFlow', 'CI/CD', 'Agente y MCP'],
+    pieza: 'Repositorio del proyecto, laboratorio reproducible, integración continua y agente de IA configurado.',
+    desc: 'Submódulo de entorno profesional: el estudiante deja el proyecto listo para trabajar en equipo. Monta el Dev Container del curso, organiza el repositorio con GitFlow, crea la integración continua con pruebas y despliegue, gestiona dependencias y secretos y configura su agente de IA con instrucciones, permisos, Skills y servidores MCP.',
+    why: 'El panel pide CI/CD, nube e Infraestructura como Código; el testeo señala brecha en uso estratégico de IA y en integración.',
+    units: [
+      ['Laboratorio virtual del curso: Dev Container con Python, Node y PostgreSQL; versiones, puertos y red', 64, [1, 2, 3], 'entorno'],
+      ['Git, GitHub y GitFlow: ramas, pull requests y revisión de código', 64, [3], 'entorno'],
+      ['Integración continua con GitHub Actions: formato, pruebas automáticas y despliegue', 72, [5, 6], 'entorno'],
+      ['Dependencias y secretos: entornos de Python con uv, variables de entorno y credenciales', 48, [3, 6], 'entorno'],
+      ['Modelamiento de la solución: arquitectura con diagramas C4, especificación técnica y especificación para el agente', 40, [1], 'prog'],
+      ['Configuración del agente de IA: instrucciones del proyecto, permisos, Skills y servidores MCP', 64, [3, 6], 'ia'],
+      ['Documentación de la instalación: README, bitácora de hallazgos y escalamiento', 32, [4], 'gestion']
+    ],
+    ev: 'Repositorio con laboratorio reproducible, pipeline funcionando, agente configurado y documento de hallazgos.' },
+  { tags: ['Desarrollo web', 'React', 'FastAPI', 'SQL II'],
+    pieza: 'Aplicación web completa: frontend en React, API en FastAPI y base de datos PostgreSQL.',
+    desc: 'Submódulo de desarrollo web: el estudiante modela el dominio y los contratos de la API y luego usa el entorno a fondo para construir la aplicación del proyecto de punta a punta: interfaz con HTML, Tailwind y JavaScript, frontend en TypeScript con React, API REST en Python con FastAPI y acceso a datos con SQLAlchemy. La IA acompaña como asistente de desarrollo.',
+    why: 'Frontend I, Backend I y II están en verde para el panel; las empresas piden interfaces funcionales, consumo de APIs e integración con bases de datos.',
+    units: [
+      ['Operación del entorno: atajos, paleta de comandos, depurador, terminal y snippets', 16, [1, 2], 'entorno'],
+      ['Modelamiento del dominio: entidades, casos de uso y contratos de la API antes de programar', 40, [5], 'prog'],
+      ['Frontend I: HTML semántico, CSS con Tailwind y JavaScript', 72, [3], 'web'],
+      ['Frontend II: TypeScript y React consumiendo la API del proyecto', 104, [3, 5], 'web'],
+      ['Backend en Python: API REST con FastAPI, validación con Pydantic y documentación automática', 104, [3, 4], 'web'],
+      ['SQL II desde la aplicación: SQLAlchemy, migraciones y consultas avanzadas', 48, [4, 6], 'sql'],
+      ['Desarrollo asistido por IA: prompting, contexto y trabajo con agentes sobre la aplicación', 48, [5, 6], 'ia']
+    ],
+    ev: 'Aplicación web funcional conectada a la base de datos, con secuencias de comandos documentadas.' },
+  { tags: ['Pruebas', 'Automatización', 'AI Skills', 'Servidor MCP'],
+    pieza: 'Solución probada y automatizada, con Skill propia y servidor MCP, entregada al cliente.',
+    desc: 'Submódulo de calidad, automatización e IA: el estudiante ejecuta, depura y prueba el código propio y el generado por IA, automatiza procesos del cliente con Python y n8n, crea sus propias Skills y construye un servidor MCP en Python sobre la base de datos. Cierra con la entrega del proyecto al cliente.',
+    why: '"La IA facilitará la sintaxis, pero el estudiante debe saber auditar la calidad del resultado." El testeo pide automatización e integración y uso estratégico de IA.',
+    units: [
+      ['Lectura y adaptación de código Python y TypeScript según requisitos de cambio', 32, [1, 2, 3], 'prog'],
+      ['Pruebas como modelo y depuración: casos de prueba desde los requisitos, pytest, pruebas de API, paso a paso y EXPLAIN', 72, [4, 5], 'prog'],
+      ['Auditoría del código generado por IA: Clean Code, OWASP Top 10 e inyección SQL', 40, [5, 6], 'ia'],
+      ['Automatización con Python y n8n: scripts, tareas programadas y webhooks', 80, [6], 'ia'],
+      ['AI Skills y MCP: crear Skills propias y construir un servidor MCP en Python sobre la base de datos', 104, [2, 3], 'ia'],
+      ['Proyecto integrador: entrega al cliente, despliegue final y sustentación consultiva', 104, [6], { ia: 56, web: 48 }]
+    ],
+    ev: 'Código depurado y probado, automatización funcionando, Skill propia, servidor MCP y solución entregada.' }
+];
+
+const STACK_A = [
+  ['Entorno y versiones', ['PSeInt', 'VS Code', 'IntelliJ', 'Git', 'GitHub'], [1, 3, 4], 'entorno'],
+  ['Virtualización', ['VirtualBox', 'WSL2'], [2], 'entorno'],
+  ['Frontend web', ['HTML5', 'CSS3', 'Tailwind', 'JavaScript'], [4], 'web'],
+  ['Backend', ['Java', 'Maven', 'JPA', 'Spring Boot', 'Swagger'], [4, 5], 'prog'],
+  ['Datos', ['SQL Server', 'MySQL', 'MongoDB', 'Power BI'], [2], 'sql'],
+  ['Python y pruebas', ['Python', 'Pandas', 'JUnit', 'pytest'], [5], 'ia'],
+  ['Gestión', ['Jira', 'Trello', 'Historias de usuario'], [3], 'gestion']
+];
+
+const LADDER_A = [
+  ['S1', 'Identificar y explicar', 'La IA explica el algoritmo; se contrasta con la prueba de escritorio'],
+  ['S4', 'Detectar errores', 'Programación en pares con copiloto; el estudiante decide'],
+  ['S5', 'Corregir y documentar', 'Auditoría de código generado por IA']
+];
+const LADDER_B = [
+  ['S1', 'Usar con criterio', 'Asistente en el IDE, ética y privacidad'],
+  ['S3', 'Configurar el agente', 'Instrucciones, permisos, Skills y MCP'],
+  ['S4', 'Desarrollar con agentes', 'Prompting y contexto sobre la aplicación'],
+  ['S5', 'Auditar y automatizar', 'Revisión de código de IA y flujos con n8n'],
+  ['S5', 'Crear Skills y MCP', 'Skills propias y servidor MCP en Python']
+];
+
+const WEB_STAGES = [
+  { n: 'Fundamentos web', d: 'HTML, CSS y JavaScript', a: 'S4·U2 · 64 h', b: 'S4·U3 · 72 h' },
+  { n: 'Frontend', d: 'DOM, TypeScript y React', a: 'S4·U3-U4 · 144 h (JavaScript)', b: 'S4·U4 · 104 h (TypeScript y React)' },
+  { n: 'Backend y APIs', d: 'APIs REST conectadas a datos', a: 'S5·U3 · 112 h (Spring Boot)', b: 'S4·U5 · 104 h (FastAPI)' },
+  { n: 'Datos desde la app', d: 'SQL, ORM y migraciones', a: 'S4·U6 · JPA (parcial)', b: 'S4·U6 · 48 h (SQLAlchemy)' },
+  { n: 'Despliegue', d: 'Hosting, dominio, HTTPS y CI/CD', a: 'S3·U6 · 80 h', b: 'S3·U3 · 72 h (CI/CD)' },
+  { n: 'Pruebas y entrega', d: 'Pruebas y proyecto', a: 'S5·U5 (parcial)', b: 'S5·U2 + U6 (integrador)' }
+];
+
+const SQL_STEPS = [
+  ['S2 · U3', 'Modelamiento', 'Del problema del cliente al modelo entidad-relación y la normalización', 64],
+  ['S2 · U4', 'SQL I', 'DDL, DML, consultas, joins, agregaciones y vistas en PostgreSQL', 96],
+  ['S2 · U5', 'SQL desde Python', 'Resolver problemas: consultas parametrizadas, carga y transformación', 48],
+  ['S4 · U6', 'SQL II desde la aplicación', 'SQLAlchemy, migraciones y consultas avanzadas', 48]
+];
+
+const TRANS_B = [
+  ['Modelar antes de codificar', 'Toda entrega empieza con un modelo: diagrama, pseudocódigo, modelo de datos o especificación.'],
+  ['Reto de lógica semanal', 'Un problema algorítmico por semana en los cinco submódulos, resuelto sin IA y luego comparado con ella.'],
+  ['Todo se versiona', 'Cada ejercicio vive en Git desde la primera semana, con README de decisiones y hallazgos.'],
+  ['IA documentada', 'Cada aporte de la IA se declara, se audita y se justifica.'],
+  ['Inglés técnico', 'Se trabaja con documentación oficial en inglés.'],
+  ['Voz del cliente', 'Cada submódulo se sustenta ante el cliente del proyecto.']
+];
+
+const MODEL_B = [
+  ['Modelo del problema', 'Descomposición, diagramas de flujo, pseudocódigo y algoritmos en Python.', 216, 'Diagrama de flujo y algoritmo probado'],
+  ['Modelo de datos', 'Del problema al modelo entidad-relación, normalización y consultas que responden preguntas.', 80, 'Modelo entidad-relación'],
+  ['Modelo de la solución', 'Arquitectura con diagramas C4 y especificación técnica, también para el agente de IA.', 40, 'Diagrama C4 y especificación'],
+  ['Modelo del dominio', 'Entidades, casos de uso y contratos de la API antes de programar.', 40, 'Contrato de la API'],
+  ['Modelo de pruebas', 'Casos de prueba desde los requisitos, depuración y lectura crítica del código de IA.', 104, 'Plan de pruebas']
+];
+
+const RUTA = [
+  ['Comité curricular', 'Aprobar los cinco submódulos con el nombre de su competencia y los 30 resultados de aprendizaje.'],
+  ['Panel empresarial', 'Contrastar la Versión B con las empresas del testeo y priorizar unidades.'],
+  ['Laboratorio virtual', 'Construir la imagen de máquina virtual y el Dev Container del curso.'],
+  ['Formación docente', 'IA aplicada, Skills, MCP, Docker, CI/CD y automatización.'],
+  ['Implementación', 'Arrancar con A, migrar unidad por unidad a B y medir en el observatorio.']
+];
+
+/* ================= HELPERS ================= */
+const $ = s => document.querySelector(s);
+const split = u => typeof u[3] === 'string' ? [[u[3], u[1]]] : Object.entries(u[3]);
+const totalsBy = mods => {
+  const t = {}; Object.keys(THREADS).forEach(k => t[k] = 0);
+  mods.forEach(m => m.units.forEach(u => split(u).forEach(([k, h]) => t[k] += h)));
+  return t;
+};
+const TA = totalsBy(MODS_A), TB = totalsBy(MODS_B);
+const nuevoA = MODS_A.reduce((a, m) => a + m.units.filter(u => u[4] === 'nuevo').reduce((s, u) => s + u[1], 0), 0);
+const fmt = n => n.toLocaleString('es-CO');
+
+/* ================= MARCO ================= */
+$('#cycleNodes').innerHTML = CE.map((c, i) => {
+  const x = 100 + i * 200;
+  return `<g>
+    <circle class="ring" cx="${x}" cy="80" r="46" fill="none" stroke="#E6007E" stroke-width="2" style="animation-delay:${i * .5}s"/>
+    <circle cx="${x}" cy="80" r="46" fill="#0E1324"/>
+    <circle cx="${x}" cy="80" r="46" fill="none" stroke="url(#gCycle)" stroke-width="3"/>
+    <text x="${x}" y="78" text-anchor="middle" fill="#fff" font-family="Poppins" font-weight="800" font-size="20">${i + 1}</text>
+    <text x="${x}" y="97" text-anchor="middle" fill="#FF9ACB" font-size="10" font-weight="700" letter-spacing="1">${c.id}</text>
+    <text x="${x}" y="156" text-anchor="middle" fill="#0E1324" font-family="Poppins" font-weight="700" font-size="17">${c.verbo}</text>
+    <text x="${x}" y="178" text-anchor="middle" fill="#6B7287" font-size="12">${c.h} h · ${c.c} créditos</text>
+  </g>`;
+}).join('');
+
+$('#ceList').innerHTML = CE.map((c, i) => `
+  <div class="reveal reveal-d${(i % 4) + 1} rounded-2xl bg-white border border-gray-100 p-4 sm:p-5 flex gap-4 items-start hover:border-magenta/30 transition">
+    <div class="shrink-0 w-10 h-10 rounded-xl bg-ink text-white grid place-items-center font-heading font-bold">${i + 1}</div>
+    <div class="flex-1">
+      <p class="text-[10px] font-bold tracking-[.16em] uppercase text-magenta">Submódulo ${i + 1} · ${c.id}</p>
+      <p class="font-heading font-semibold leading-snug mt-0.5">${c.nombre}</p>
+      <p class="text-xs text-ink-3 mt-0.5">${c.comp}</p>
+    </div>
+    <span class="text-xs font-bold text-ink-2 shrink-0">${c.h} h</span>
+  </div>`).join('');
+
+/* ================= DIAGNOSTICO ================= */
+$('#brechas').innerHTML = BRECHAS.map(b => {
+  const c = b.l === 'Crítica' ? 'bg-magenta' : b.l === 'Alta' ? 'bg-violet-brand' : 'bg-ink-3/50';
+  const tc = b.l === 'Crítica' ? 'text-magenta' : b.l === 'Alta' ? 'text-violet-brand' : 'text-ink-3';
+  return `<div><div class="flex justify-between text-sm"><span class="font-medium">${b.n}</span><span class="text-[11px] font-bold ${tc}">${b.l}</span></div>
+  <div class="mt-1.5 h-2 rounded-full bg-white overflow-hidden"><div class="bar h-full rounded-full ${c}" data-w="${b.v}"></div></div></div>`;
+}).join('');
+$('#demanda').innerHTML = DEMANDA.map(([n, v]) => `
+  <div class="grid grid-cols-[1fr_auto] gap-x-3 items-center"><span class="text-sm">${n}</span><span class="text-xs font-bold text-ink-2">${v} %</span>
+  <div class="col-span-2 mt-1 h-2 rounded-full bg-white overflow-hidden"><div class="bar h-full rounded-full bg-gradient-to-r from-cyan-brand to-violet-brand" data-w="${v * 2}"></div></div></div>`).join('');
+const semColor = { verde: 'bg-emerald-500', amarillo: 'bg-amber-400', debate: 'bg-violet-brand' };
+const valColor = { alta: 'text-emerald-600 bg-emerald-50', media: 'text-amber-600 bg-amber-50', baja: 'text-rose-600 bg-rose-50' };
+$('#semaforo').innerHTML = MATERIAS.map(m => `
+  <div class="flex items-center gap-3 rounded-xl bg-white px-3.5 py-2.5"><i class="w-2.5 h-2.5 rounded-full shrink-0 ${semColor[m.sem]}"></i>
+  <span class="text-sm flex-1 truncate">${m.n}</span><span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md ${valColor[m.val]}">${m.val}</span></div>`).join('');
+
+/* ================= SANKEY ================= */
+function sankey(el, left, right, links, dark) {
+  const W = 1000, H = 560, x0 = 250, x1 = 735, nw = 14, gap = 10;
+  const sumL = left.reduce((a, n) => a + n.v, 0);
+  const s = Math.min((H - gap * (left.length - 1)) / sumL, (H - gap * (right.length - 1)) / sumL);
+  const place = nodes => {
+    let y = (H - (sumL * s + gap * (nodes.length - 1))) / 2;
+    nodes.forEach(n => { n.y = y; n.h = n.v * s; y += n.h + gap; });
+  };
+  place(left); place(right);
+  const outOff = {}, inOff = {};
+  [...links].sort((a, b) => a.l - b.l || a.r - b.r).forEach(k => { outOff[k.l] = outOff[k.l] || 0; k.ya = left[k.l].y + outOff[k.l]; outOff[k.l] += k.v * s; });
+  [...links].sort((a, b) => a.r - b.r || a.l - b.l).forEach(k => { inOff[k.r] = inOff[k.r] || 0; k.yb = right[k.r].y + inOff[k.r]; inOff[k.r] += k.v * s; });
+  const xm = (x0 + nw + x1) / 2;
+  const txt = dark ? '#fff' : '#0E1324', sub = dark ? 'rgba(255,255,255,.55)' : '#6B7287';
+  const paths = links.map(k => {
+    const h = k.v * s, a = x0 + nw;
+    return `<path class="sk-link" data-l="${k.l}" data-r="${k.r}" fill="${left[k.l].c}" opacity="${dark ? .45 : .35}"
+      d="M${a},${k.ya} C${xm},${k.ya} ${xm},${k.yb} ${x1},${k.yb} L${x1},${k.yb + h} C${xm},${k.yb + h} ${xm},${k.ya + h} ${a},${k.ya + h} Z"><title>${left[k.l].n} → ${right[k.r].n}: ${k.v} h</title></path>`;
+  }).join('');
+  const ln = left.map((n, i) => `<g class="sk-node" data-side="l" data-i="${i}">
+      <rect x="${x0}" y="${n.y}" width="${nw}" height="${Math.max(n.h, 2)}" rx="3" fill="${n.c}"/>
+      <text x="${x0 - 10}" y="${n.y + n.h / 2 - 2}" text-anchor="end" fill="${txt}" font-size="13" font-weight="600">${n.n}</text>
+      <text x="${x0 - 10}" y="${n.y + n.h / 2 + 13}" text-anchor="end" fill="${sub}" font-size="11">${n.v} h</text></g>`).join('');
+  const rn = right.map((n, i) => `<g class="sk-node" data-side="r" data-i="${i}">
+      <rect x="${x1}" y="${n.y}" width="${nw}" height="${n.h}" rx="3" fill="${dark ? '#fff' : '#0E1324'}"/>
+      <text x="${x1 + nw + 12}" y="${n.y + n.h / 2 - 4}" fill="${txt}" font-size="14" font-weight="700" font-family="Poppins">${i + 1} · ${n.n}</text>
+      <text x="${x1 + nw + 12}" y="${n.y + n.h / 2 + 13}" fill="${sub}" font-size="11">${n.sub}</text></g>`).join('');
+  const cid = 'clip' + el.id;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="w-full sk" role="img">
+    <defs><clipPath id="${cid}"><rect class="sk-clip" x="0" y="0" width="${W}" height="${H}"/></clipPath></defs>
+    <g clip-path="url(#${cid})">${paths}</g>${ln}${rn}</svg>`;
+  const svg = el.querySelector('svg');
+  const on = (side, i) => {
+    svg.classList.add('hover');
+    svg.querySelectorAll('.sk-link').forEach(p => p.classList.toggle('on', p.dataset[side] == i));
+  };
+  svg.querySelectorAll('.sk-node').forEach(g => {
+    g.addEventListener('mouseenter', () => on(g.dataset.side, g.dataset.i));
+    g.addEventListener('click', () => on(g.dataset.side, g.dataset.i));
+  });
+  svg.querySelectorAll('.sk-link').forEach(p => p.addEventListener('mouseenter', () => {
+    svg.classList.add('hover');
+    svg.querySelectorAll('.sk-link').forEach(q => q.classList.toggle('on', q === p));
+  }));
+  svg.addEventListener('mouseleave', () => svg.classList.remove('hover'));
+}
+
+const rightNodes = () => CE.map(c => ({ n: c.verbo, sub: `${c.id} · ${c.h} h`, v: c.h }));
+
+(function () {
+  const srcs = [...MATERIAS, NUEVO];
+  const links = [];
+  MODS_A.forEach((m, r) => m.units.forEach(u => {
+    const l = srcs.findIndex(s => s.id === u[4]);
+    const ex = links.find(k => k.l === l && k.r === r);
+    ex ? ex.v += u[1] : links.push({ l, r, v: u[1] });
+  }));
+  const left = srcs.map((s, i) => ({ n: s.n, c: LEVEL_C[s.nivel], v: links.filter(k => k.l === i).reduce((a, k) => a + k.v, 0) }));
+  sankey($('#sankeyA'), left, rightNodes(), links, false);
+  $('#legendA').innerHTML = [['Nivel I', 'I'], ['Nivel II', 'II'], ['Nivel III', 'III'], ['Contenido nuevo', 'N']]
+    .map(([t, k]) => `<span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm" style="background:${LEVEL_C[k]}"></i>${t}</span>`).join('');
+})();
+
+(function () {
+  const keys = Object.keys(THREADS);
+  const links = [];
+  MODS_B.forEach((m, r) => m.units.forEach(u => split(u).forEach(([k, h]) => {
+    const l = keys.indexOf(k);
+    const ex = links.find(x => x.l === l && x.r === r);
+    ex ? ex.v += h : links.push({ l, r, v: h });
+  })));
+  const left = keys.map(k => ({ n: THREADS[k].n, c: THREADS[k].c, v: TB[k] }));
+  sankey($('#sankeyB'), left, rightNodes(), links, true);
+})();
+
+/* ================= KPIs ================= */
+const kpi = (v, l, dark, c) => `<div class="rounded-2xl ${dark ? 'bg-white/[.06] border border-white/10' : 'bg-white border border-gray-100'} p-4 text-center">
+  <div class="font-heading font-bold text-2xl" style="color:${c}"><span data-count="${v}">${v}</span> h</div><div class="text-[11px] ${dark ? 'text-white/60' : 'text-ink-3'} mt-1">${l}</div></div>`;
+$('#kpiA').innerHTML = kpi(TA.web, 'Desarrollo web', false, THREADS.web.c) + kpi(TA.sql, 'SQL y datos', false, THREADS.sql.c) + kpi(TA.ia, 'IA y automatización', false, '#D97706');
+$('#kpiB').innerHTML = kpi(TB.web, 'Desarrollo web', true, '#FF4FA8') + kpi(TB.sql, 'SQL y datos', true, '#5ED3EA') + kpi(TB.ia, 'IA y automatización', true, '#FCD34D');
+
+/* ================= STACK A ================= */
+$('#stackA').innerHTML = STACK_A.map(([layer, items, mods, th]) => `
+  <div class="grid grid-cols-[120px_1fr_auto] items-center gap-3 rounded-2xl p-3 pl-4 border-l-4 bg-mist hover:translate-x-1 transition" style="border-color:${THREADS[th].c}">
+    <span class="text-xs font-bold text-ink-2">${layer}</span>
+    <div class="flex flex-wrap gap-1.5">${items.map(t => `<span class="text-[11px] font-semibold bg-white px-2 py-1 rounded-md">${t}</span>`).join('')}</div>
+    <div class="flex gap-1">${mods.map(m => `<span class="w-7 h-6 rounded-md bg-ink text-white text-[10px] font-bold grid place-items-center">S${m}</span>`).join('')}</div>
+  </div>`).join('');
+
+/* ================= LADDERS ================= */
+const ladder = (el, data, dark, color) => {
+  el.innerHTML = data.map(([s, t, d], i) => {
+    const h = 30 + (70 * (i + 1)) / data.length;
+    return `<div class="flex-1 flex flex-col justify-end h-full">
+      <div class="rounded-t-2xl p-3 flex flex-col justify-between step" style="height:${h}%;background:linear-gradient(180deg, ${color}${dark ? '55' : '33'}, ${color}${dark ? '18' : '10'});border-top:3px solid ${color}">
+        <div><span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${dark ? 'bg-white/15' : 'bg-white'}">${s}</span>
+        <p class="font-heading font-bold text-sm mt-2 leading-tight">${t}</p></div>
+        <p class="text-[11px] ${dark ? 'text-white/65' : 'text-ink-3'} leading-snug mt-1 hidden sm:block">${d}</p>
+      </div></div>`;
+  }).join('');
+};
+ladder($('#ladderA'), LADDER_A, false, '#F59E0B');
+ladder($('#ladderB'), LADDER_B, true, '#F59E0B');
+
+/* ================= SUBMODULOS ================= */
+function stackBar(m, h) {
+  return m.units.flatMap(u => split(u).map(([k, v]) => `<div title="${THREADS[k].n}: ${v} h" style="width:${(v / h) * 100}%;background:${THREADS[k].c}" class="h-full"></div>`)).join('');
+}
+function unitRows(m, dark) {
+  const max = Math.max(...m.units.map(u => u[1]));
+  return m.units.map((u, k) => {
+    const parts = split(u);
+    return `<div class="grid grid-cols-[auto_1fr_auto] gap-x-4 items-start py-3 ${k ? (dark ? 'border-t border-white/10' : 'border-t border-gray-100') : ''}">
+      <span class="font-heading font-bold text-xs ${dark ? 'text-white/40' : 'text-ink-3'} pt-0.5">U${k + 1}</span>
+      <div><p class="text-sm leading-snug">${u[0]}</p>
+        <div class="flex flex-wrap gap-1 mt-1.5 items-center">
+          ${parts.map(([t]) => `<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center gap-1 ${dark ? 'bg-white/10 text-white/75' : 'bg-mist text-ink-2'}"><i class="w-1.5 h-1.5 rounded-full" style="background:${THREADS[t].c}"></i>${THREADS[t].n}</span>`).join('')}
+          ${u[2].map(r => `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${dark ? 'bg-white/5 text-white/50' : 'bg-white border border-gray-100 text-ink-3'}">RA${r}</span>`).join('')}
+        </div></div>
+      <div class="text-right w-20"><span class="text-sm font-bold">${u[1]} h</span>
+        <div class="mt-1.5 h-1 rounded-full ${dark ? 'bg-white/10' : 'bg-gray-100'} overflow-hidden"><div class="bar h-full rounded-full" data-w="${(u[1] / max) * 100}" style="background:${THREADS[parts[0][0]].c}"></div></div></div>
+    </div>`;
+  }).join('');
+}
+function modCard(m, i, version) {
+  const dark = version === 'B', c = CE[i];
+  const tot = {}; m.units.forEach(u => split(u).forEach(([k, h]) => tot[k] = (tot[k] || 0) + h));
+  const dom = Object.entries(tot).sort((a, b) => b[1] - a[1])[0];
+  const muted = dark ? 'text-white/55' : 'text-ink-3';
+  const side = version === 'A' ? `
+      <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-emerald-700">Se conserva</p><ul class="mt-2 space-y-1 text-sm text-emerald-900">${m.keep.map(x => `<li>${x}</li>`).join('')}</ul></div>
+      <div class="rounded-2xl bg-amber-50 p-4"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-amber-700">Se ajusta</p><ul class="mt-2 space-y-1 text-sm text-amber-900">${m.adjust.map(x => `<li>${x}</li>`).join('')}</ul></div>
+      <div class="rounded-2xl bg-rose-50 p-4"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-rose-700">Se reduce o traslada</p><ul class="mt-2 space-y-1 text-sm text-rose-900">${m.drop.map(x => `<li>${x}</li>`).join('')}</ul></div>
+      <div class="rounded-2xl bg-mist p-4"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-ink-3">Materias de origen</p><div class="flex flex-wrap gap-1.5 mt-2">${[...new Set(m.units.map(u => u[4]))].map(o => { const s = [...MATERIAS, NUEVO].find(x => x.id === o); return `<span class="text-[11px] font-semibold px-2 py-1 rounded-md bg-white flex items-center gap-1.5"><i class="w-2 h-2 rounded-full" style="background:${LEVEL_C[s.nivel]}"></i>${s.n}</span>`; }).join('')}</div></div>`
+    : `<div class="rounded-2xl p-5" style="background:linear-gradient(135deg, rgba(230,0,126,.28), rgba(123,92,255,.22))"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-white/70">Pieza del proyecto</p><p class="mt-2 text-sm text-white font-medium leading-relaxed">${m.pieza}</p></div><div class="rounded-2xl bg-white/[.06] border border-white/10 p-5"><p class="text-[10px] font-bold tracking-[.16em] uppercase text-magenta-soft">Por qué este cambio</p><p class="mt-2 text-sm text-white/80 leading-relaxed">${m.why}</p></div>`;
+  return `
+  <article class="acc reveal rounded-3xl ${dark ? 'bg-white/[.04] border border-white/10' : 'bg-white border border-gray-100'} hover:shadow-[0_30px_60px_-30px_rgba(14,19,36,.35)] transition-shadow duration-500">
+    <button class="acc-head w-full text-left p-6 sm:p-7" aria-expanded="false">
+      <div class="flex items-start gap-5">
+        <div class="shrink-0 w-14 h-14 rounded-2xl grid place-items-center font-heading font-extrabold text-xl ${dark ? 'bg-white text-ink' : 'bg-ink text-white'}">${i + 1}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[10px] font-bold tracking-[.16em] uppercase ${dark ? 'text-magenta-soft' : 'text-magenta'}">${c.id}-4-INCO-SWE-001</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${dark ? 'bg-white/10 text-white/80' : 'bg-mist text-ink-2'}">${c.h} h · ${c.c} créditos</span>
+          </div>
+          <h4 class="font-heading font-bold text-lg sm:text-2xl mt-1.5 leading-tight">${c.nombre}</h4>
+          <p class="text-sm ${muted} mt-0.5">${c.comp}</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            ${version === 'A' ? `<span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-800">Énfasis: ${m.enfasis}</span>`
+              : m.tags.map(t => `<span class="text-[11px] font-medium px-2.5 py-1 rounded-full border border-white/15 text-white/80">${t}</span>`).join('')}
+          </div>
+        </div>
+        <svg class="chev w-5 h-5 shrink-0 mt-2 ${muted}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="mt-5 sm:pl-[76px]">
+        <div class="flex h-3 rounded-full overflow-hidden gap-[2px] grow">${stackBar(m, c.h)}</div>
+        <p class="text-[11px] ${muted} mt-1.5 flex items-center gap-1.5"><i class="w-2 h-2 rounded-full" style="background:${THREADS[dom[0]].c}"></i>Eje dominante: <b class="${dark ? 'text-white' : 'text-ink'}">${THREADS[dom[0]].n}</b> · ${Math.round(dom[1] / c.h * 100)} % de las horas</p>
+      </div>
+    </button>
+    <div class="acc-body"><div>
+      <div class="px-6 sm:px-7 pb-7 pt-1">
+        <p class="text-sm ${dark ? 'text-white/70' : 'text-ink-2'} leading-relaxed max-w-4xl">${m.desc}</p>
+        <div class="mt-6 grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8">
+            <p class="text-[10px] font-bold tracking-[.16em] uppercase ${muted} mb-1">Unidades y horas</p>
+            ${unitRows(m, dark)}
+          </div>
+          <div class="lg:col-span-4 space-y-4">${side}
+            <div class="rounded-2xl p-4 ${dark ? 'bg-white/[.06]' : 'bg-mist'}"><p class="text-[10px] font-bold tracking-[.16em] uppercase ${muted}">Evidencia de aprendizaje</p><p class="text-sm mt-1.5 ${dark ? 'text-white/80' : 'text-ink-2'}">${m.ev}</p></div>
+          </div>
+        </div>
+        <div class="mt-6 pt-5 ${dark ? 'border-t border-white/10' : 'border-t border-gray-100'}">
+          <p class="text-[10px] font-bold tracking-[.16em] uppercase ${muted} mb-3">Resultados de aprendizaje del estándar</p>
+          <div class="grid sm:grid-cols-2 gap-2">${c.ra.map((r, k) => `<div class="flex gap-2.5 text-xs ${dark ? 'text-white/70' : 'text-ink-2'}"><span class="font-bold shrink-0 ${dark ? 'text-magenta-soft' : 'text-magenta'}">RA${k + 1}</span><span>${r}</span></div>`).join('')}</div>
+        </div>
+      </div>
+    </div></div>
+  </article>`;
+}
+$('#modsA').innerHTML = MODS_A.map((m, i) => modCard(m, i, 'A')).join('');
+$('#modsB').innerHTML = MODS_B.map((m, i) => modCard(m, i, 'B')).join('');
+document.querySelectorAll('.legend-threads').forEach(el => el.innerHTML = Object.values(THREADS)
+  .map(t => `<span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm" style="background:${t.c}"></i>${t.n}</span>`).join(''));
+document.querySelectorAll('.acc').forEach(acc => {
+  const head = acc.querySelector('.acc-head');
+  head.addEventListener('click', () => {
+    const open = acc.classList.toggle('open');
+    head.setAttribute('aria-expanded', open);
+    if (open) acc.querySelectorAll('.acc-body .bar').forEach(b => setTimeout(() => b.style.width = b.dataset.w + '%', 150));
+  });
+});
+['#modsA', '#modsB'].forEach(id => document.querySelector(id + ' .acc').classList.add('open'));
+
+$('#transB').innerHTML = TRANS_B.map(([t, d], i) => `
+  <div class="reveal reveal-d${(i % 4) + 1} rounded-2xl bg-white/[.05] border border-white/10 p-5 hover:bg-white/[.09] transition">
+    <div class="w-8 h-1 rounded-full mb-4 bg-gradient-to-r from-magenta to-violet-brand"></div>
+    <p class="font-heading font-semibold">${t}</p><p class="text-xs text-white/60 mt-1.5 leading-relaxed">${d}</p></div>`).join('');
+
+/* ================= COLUMNA VERTEBRAL ================= */
+const spineTot = MODEL_B.reduce((a, m) => a + m[2], 0);
+const logicaA = MODS_A.reduce((a, m) => a + m.units.filter(u => u[4] === 'logica' || /^Model/.test(u[0])).reduce((s, u) => s + u[1], 0), 0);
+const modB = spineTot - MODEL_B[4][2];
+$('#spineKpi').innerHTML = [[modB, 'h de lógica y modelamiento en B, en los 5 submódulos', 'text-white'], ['+' + MODEL_B[4][2], 'h de pruebas como modelo en el submódulo 5', 'text-[#C9B8FF]'], [logicaA, 'h de lógica y modelado en A, solo en S1 y S2', 'text-white/50']]
+  .map(([v, l, c]) => `<div class="rounded-2xl bg-white/[.06] border border-white/10 px-4 py-3 w-36"><p class="font-heading font-bold text-2xl ${c}">${v}</p><p class="text-[10px] text-white/55 leading-snug mt-0.5">${l}</p></div>`).join('');
+$('#spineB').innerHTML = MODEL_B.map(([t, d, h, art], i) => `
+  <div class="reveal reveal-d${(i % 4) + 1} text-center md:text-left">
+    <div class="flex md:block justify-center"><span class="relative z-10 mx-auto w-10 h-10 rounded-full bg-[#7B5CFF] ring-4 ring-[#7B5CFF]/25 text-white grid place-items-center font-heading font-bold text-sm">S${i + 1}</span></div>
+    <div class="mt-4 rounded-2xl bg-white/[.06] border border-white/10 p-4 h-[calc(100%-3.5rem)] hover:bg-white/[.1] transition">
+      <p class="text-[10px] font-bold uppercase tracking-wider text-white/45">${CE[i].verbo}</p>
+      <p class="font-heading font-semibold mt-1">${t}</p>
+      <p class="text-xs text-white/60 mt-1.5 leading-relaxed">${d}</p>
+      <div class="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="h-full rounded-full grow" style="width:${h / 216 * 100}%;background:#B79BFF"></div></div>
+      <p class="text-[11px] text-white/70 mt-1.5"><b class="text-white">${h} h</b> · ${Math.round(h / CE[i].h * 100)} % del submódulo</p>
+      <p class="mt-3 inline-block text-[10px] font-semibold px-2 py-1 rounded-md bg-[#7B5CFF]/30 text-[#DCD0FF]">Artefacto: ${art}</p>
+    </div>
+  </div>`).join('');
+
+/* ================= MAPAS Y PROYECTO ================= */
+document.querySelectorAll('svg [data-b]').forEach(g => {
+  const dark = !!g.closest('svg[data-dark]');
+  const [x, y] = g.dataset.at.split(',').map(Number);
+  g.innerHTML = g.dataset.b.split(' ').map((s, i) => `<g transform="translate(${x + i * 34},${y})">
+    <rect width="30" height="18" rx="9" fill="${dark ? '#fff' : '#0E1324'}"/>
+    <text x="15" y="12.5" text-anchor="middle" font-size="10" font-weight="700" font-family="Inter" fill="${dark ? '#0E1324' : '#fff'}">${s}</text></g>`).join('');
+});
+document.querySelectorAll('[data-sublegend]').forEach(el => {
+  const dark = el.dataset.sublegend === 'dark';
+  el.innerHTML = CE.map((c, i) => `<span class="flex items-center gap-1.5"><b class="px-2 py-0.5 rounded-full text-[10px] ${dark ? 'bg-white text-ink' : 'bg-ink text-white'}">S${i + 1}</b>${c.verbo}</span>`).join('');
+});
+$('#projectB').innerHTML = MODS_B.map((m, i) => {
+  const t = {}; m.units.forEach(u => split(u).forEach(([k, h]) => t[k] = (t[k] || 0) + h));
+  const [k, h] = Object.entries(t).sort((a, b) => b[1] - a[1])[0];
+  return `<div class="relative reveal reveal-d${(i % 4) + 1}">
+    <div class="step h-full rounded-2xl bg-white/[.05] border border-white/10 p-5" style="border-top:3px solid ${THREADS[k].c}">
+      <div class="flex items-center justify-between"><span class="w-8 h-8 rounded-lg bg-white text-ink grid place-items-center font-heading font-bold text-sm">${i + 1}</span><span class="text-[10px] font-bold uppercase tracking-wider text-white/50">${CE[i].verbo}</span></div>
+      <p class="font-heading font-semibold text-sm mt-4 leading-snug">${m.pieza}</p>
+      <p class="text-[11px] mt-3 flex items-center gap-1.5 text-white/60"><i class="w-2 h-2 rounded-full" style="background:${THREADS[k].c}"></i>${THREADS[k].n} · ${Math.round(h / CE[i].h * 100)} %</p>
+    </div>
+    ${i < 4 ? '<svg class="hidden md:block absolute top-1/2 -right-3 -translate-y-1/2 z-10 w-3 h-4" viewBox="0 0 12 16"><path d="M0 0L12 8L0 16z" fill="#FF4FA8"/></svg>' : ''}
+  </div>`;
+}).join('');
+
+/* ================= WEB Y SQL ================= */
+$('#webFlow').innerHTML = `
+  <div class="grid grid-cols-[90px_repeat(6,1fr)] gap-x-3 gap-y-3 items-stretch">
+    <div></div>
+    ${WEB_STAGES.map((s, i) => `
+      <div class="relative">
+        <div class="rounded-2xl bg-gradient-to-br from-magenta to-violet-brand text-white p-4 h-full step">
+          <p class="text-[10px] font-bold tracking-[.16em] uppercase text-white/70">Etapa ${i + 1}</p>
+          <p class="font-heading font-bold text-sm mt-1 leading-tight">${s.n}</p>
+          <p class="text-[11px] text-white/75 mt-1 leading-snug">${s.d}</p>
+        </div>
+        ${i < WEB_STAGES.length - 1 ? `<svg class="absolute top-1/2 -right-3 -translate-y-1/2 z-10 w-3 h-4" viewBox="0 0 12 16"><path d="M0 0L12 8L0 16z" fill="#7B5CFF"/></svg>` : ''}
+      </div>`).join('')}
+    <div class="flex items-center"><span class="text-xs font-bold flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-cyan-brand"></i>Versión A</span></div>
+    ${WEB_STAGES.map(s => `<div class="rounded-xl bg-mist border border-gray-100 p-3 text-xs font-semibold text-ink-2">${s.a}</div>`).join('')}
+    <div class="flex items-center"><span class="text-xs font-bold flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-magenta"></i>Versión B</span></div>
+    ${WEB_STAGES.map(s => `<div class="rounded-xl bg-magenta/[.07] border border-magenta/20 p-3 text-xs font-semibold text-ink">${s.b}</div>`).join('')}
+  </div>`;
+
+const maxT = Math.max(...Object.keys(THREADS).map(k => Math.max(TA[k], TB[k])));
+$('#threadBars').innerHTML = Object.entries(THREADS).map(([k, t]) => `
+  <div>
+    <div class="flex justify-between items-baseline text-sm"><span class="font-semibold flex items-center gap-2"><i class="w-2.5 h-2.5 rounded-sm" style="background:${t.c}"></i>${t.n}</span>
+      <span class="text-xs text-ink-3"><b class="text-ink-2">${TA[k]}</b> h → <b style="color:${t.c}">${TB[k]}</b> h</span></div>
+    <div class="mt-1.5 space-y-1">
+      <div class="h-2 rounded-full bg-gray-100 overflow-hidden"><div class="bar h-full rounded-full bg-ink-3/40" data-w="${(TA[k] / maxT) * 100}"></div></div>
+      <div class="h-2 rounded-full bg-gray-100 overflow-hidden"><div class="bar h-full rounded-full" style="background:${t.c}" data-w="${(TB[k] / maxT) * 100}"></div></div>
+    </div>
+  </div>`).join('');
+
+$('#sqlSteps').innerHTML = SQL_STEPS.map(([w, t, d, h], i) => `
+  <div class="flex gap-3 items-stretch">
+    <div class="flex flex-col items-center"><span class="w-8 h-8 rounded-full bg-cyan-brand text-ink grid place-items-center font-heading font-bold text-sm">${i + 1}</span>${i < SQL_STEPS.length - 1 ? '<span class="flex-1 w-px bg-cyan-brand/40 mt-1"></span>' : ''}</div>
+    <div class="flex-1 rounded-2xl bg-white/[.06] border border-white/10 p-4 mb-1">
+      <div class="flex justify-between gap-2"><p class="font-heading font-semibold text-sm">${t}</p><span class="text-xs font-bold text-cyan-300">${h} h</span></div>
+      <p class="text-[10px] font-bold text-white/40 mt-0.5">${w}</p>
+      <p class="text-xs text-white/65 mt-1">${d}</p>
+    </div>
+  </div>`).join('') + `<p class="text-xs text-white/60 pt-2">Total SQL y datos: <b class="text-white">${TB.sql} h</b> en la Versión B frente a <b class="text-white">${TA.sql} h</b> en la Versión A.</p>`;
+
+/* ================= COMPARATIVO ================= */
+const dominance = mods => mods.map((m, i) => {
+  const t = {}; m.units.forEach(u => split(u).forEach(([k, h]) => t[k] = (t[k] || 0) + h));
+  return Math.round(Math.max(...Object.values(t)) / CE[i].h * 100);
+});
+const DA = dominance(MODS_A), DB = dominance(MODS_B);
+const COMP = [
+  ['Nombres de submódulo', 'Nombre de la competencia específica.', 'Nombre de la competencia específica.'],
+  ['Lógica y modelamiento', `${logicaA} h de lógica y modelado de datos, en los submódulos 1 y 2.`, `${modB} h en los cinco submódulos (modelo del problema, de datos, de la solución y del dominio), más ${MODEL_B[4][2]} h de pruebas como modelo.`],
+  ['Lenguaje principal', 'Java en backend y JavaScript en frontend; Python solo para analítica.', 'Python predomina: lógica, backend con FastAPI, automatización y MCP. TypeScript en el frontend.'],
+  ['Concentración', `Eje dominante entre ${Math.min(...DA)} % y ${Math.max(...DA)} % de las horas por submódulo.`, `Eje dominante entre ${Math.min(...DB)} % y ${Math.max(...DB)} %: cada submódulo tiene un tema principal claro.`],
+  ['Hilo conductor', 'Proyectos ligados a las materias de origen.', 'Un solo proyecto para un cliente real que crece en los cinco submódulos.'],
+  ['Grado de cambio', `Conserva ${Math.round((1 - nuevoA / 1824) * 100)} % de las horas desde las materias actuales.`, 'Más de la mitad de los contenidos son nuevos o reorientados.'],
+  ['Desarrollo web', `${TA.web} h repartidas en los submódulos 3, 4 y 5.`, `${TB.web} h, concentradas en el submódulo 4 (React, FastAPI y SQLAlchemy), más despliegue con CI/CD.`],
+  ['SQL y datos', `${TA.sql} h concentradas en el submódulo 2.`, `${TB.sql} h: modelado, SQL I, SQL desde Python y SQL II desde la aplicación.`],
+  ['IA y automatización', `${TA.ia} h explícitas más auditoría transversal.`, `${TB.ia} h: agente configurado, desarrollo con IA, automatización con n8n, Skills y servidor MCP.`],
+  ['Entornos', 'Máquinas virtuales para los laboratorios de instalación.', 'Laboratorio virtual completo (máquina virtual, WSL2 o nube): sin instalación nativa.'],
+  ['Formación docente', 'Baja: IA aplicada, GitFlow y virtualización.', 'Alta: Python y FastAPI, Skills, MCP, Docker, CI/CD y automatización.'],
+  ['Tiempo de implementación', 'Inmediato (próxima cohorte).', 'Una cohorte de preparación y piloto.']
+];
+$('#compBody').innerHTML = COMP.map(([c, a, b]) => `<tr class="hover:bg-mist/70 transition"><td class="p-5 font-semibold align-top">${c}</td><td class="p-5 text-ink-2 align-top">${a}</td><td class="p-5 text-ink-2 align-top">${b}</td></tr>`).join('');
+
+/* ================= CRUCE A / B ================= */
+const VENN = {
+  a: ['Java y Spring Boot', 'JavaScript en el frontend', 'SQL Server y MySQL', 'Pandas y Power BI', 'Jira y Trello', 'Hosting tradicional', 'IA como copiloto', 'Proyecto por materia'],
+  c: ['5 submódulos = 5 CE', '1.824 h · 38 créditos', '30 resultados de aprendizaje', 'Lógica de programación', 'SQL y modelado de datos', 'Web: frontend y backend', 'Git y GitHub', 'Máquinas virtuales', 'Pruebas y depuración', 'Auditoría de código IA'],
+  b: ['Python como eje', 'Modelamiento en los 5', 'React y FastAPI', 'PostgreSQL', 'Dev Container sin instalar', 'CI/CD con GitHub Actions', 'Agente con Skills y MCP', 'Automatización con n8n', 'Un cliente real']
+};
+const vCol = (items, x, fill, weight) => items.map((t, i) => `<text class="vt" style="transition-delay:${.5 + i * .05}s" x="${x}" y="${300 - (items.length - 1) * 14 + i * 28 + 5}" text-anchor="middle" fill="${fill}" font-weight="${weight}">${t}</text>`).join('');
+$('#vennText').innerHTML = vCol(VENN.a, 255, '#0369A1', 500) + vCol(VENN.c, 500, '#0E1324', 700) + vCol(VENN.b, 745, '#B00062', 500);
+
+const crossMax = Math.max(...Object.keys(THREADS).flatMap(k => [TA[k], TB[k]])) * 1.08;
+const crossRows = [['mod', { n: 'Lógica y modelamiento', c: '#7B5CFF' }], ...Object.entries(THREADS)];
+const crossVal = { mod: [logicaA, modB] };
+$('#crossDumb').innerHTML = crossRows.map(([k, t], ri) => {
+  const [a, b] = crossVal[k] || [TA[k], TB[k]], pa = a / crossMax * 100, pb = b / crossMax * 100, lo = Math.min(pa, pb), d = b - a;
+  const col = d > 0 ? '#E6007E' : d < 0 ? '#00B4D8' : '#7B5CFF';
+  return `${ri === 1 ? '<p class="text-[10px] font-bold tracking-[.18em] uppercase text-ink-3 pt-2 border-t border-gray-100">Hilos formativos</p>' : ''}<div class="grid grid-cols-[150px_1fr_110px] sm:grid-cols-[220px_1fr_130px] items-center gap-4 ${ri === 0 ? 'rounded-2xl bg-[#7B5CFF]/[.07] -mx-3 px-3 py-2' : ''}">
+    <p class="text-sm font-semibold flex items-center gap-2"><i class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${t.c}"></i>${t.n}</p>
+    <div class="relative h-9">
+      <div class="absolute inset-x-0 top-1/2 h-px bg-gray-200"></div>
+      <div class="absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full grow" style="left:${lo}%;width:${Math.abs(pb - pa)}%;background:${col}"></div>
+      <div class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-cyan-brand ring-4 ring-white shadow" style="left:${pa}%"></div>
+      <div class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-magenta ring-4 ring-white shadow" style="left:${pb}%"></div>
+      <span class="absolute -top-2.5 -translate-x-1/2 text-[10px] font-bold text-[#0284A8]" style="left:${pa}%;${Math.abs(pb - pa) < 7 && pa > pb ? 'margin-left:14px' : Math.abs(pb - pa) < 7 ? 'margin-left:-14px' : ''}">${a}</span>
+      <span class="absolute -top-2.5 -translate-x-1/2 text-[10px] font-bold text-[#B00062]" style="left:${pb}%;${Math.abs(pb - pa) < 7 && pb >= pa ? 'margin-left:14px' : Math.abs(pb - pa) < 7 ? 'margin-left:-14px' : ''}">${b}</span>
+    </div>
+    <p class="text-xs text-right"><b style="color:${col}">${d === 0 ? 'igual' : (d > 0 ? '+' : '−') + Math.abs(d) + ' h'}</b> <span class="text-ink-3">${d > 0 ? 'en B' : d < 0 ? 'en A' : ''}</span></p>
+  </div>`;
+}).join('');
+
+$('#crossCards').innerHTML = [
+  ['Versión A', 'Lo que conserva', 'El equipo docente, las 9 materias reconocibles dentro de los submódulos y el stack Java, JavaScript y SQL Server. Cambio bajo y arranque inmediato.', '#00B4D8', 'bg-white'],
+  ['Núcleo común', 'Lo que no se negocia', 'Las 5 competencias con sus 30 RA, lógica, SQL, web, Git, máquinas virtuales, pruebas y auditoría de IA. Es el puente para migrar de A a B.', '#7B5CFF', 'bg-white'],
+  ['Versión B', 'Lo que agrega', 'Lógica y modelamiento en los cinco submódulos, Python como eje, laboratorio sin instalación, CI/CD, agentes con Skills y MCP, automatización y un cliente real.', '#E6007E', 'bg-white']
+].map(([v, t, d, c], i) => `<div class="reveal reveal-d${i + 1} rounded-3xl bg-white border border-gray-100 p-6 relative overflow-hidden" style="border-top:4px solid ${c}">
+  <p class="text-[10px] font-bold uppercase tracking-[.16em]" style="color:${c}">${v}</p>
+  <h4 class="font-heading font-bold text-lg mt-2">${t}</h4><p class="text-sm text-ink-2 mt-2 leading-relaxed">${d}</p></div>`).join('');
+
+$('#migraSteps').innerHTML = [['A', 'Arranque con A'], ['1', 'Lógica y modelamiento'], ['2', 'Laboratorio virtual y Python'], ['3', 'FastAPI, React y CI/CD'], ['4', 'Skills, MCP y automatización'], ['B', 'Versión B completa']]
+  .map(([n, t], i, arr) => `<span class="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 ${i === 0 ? 'bg-cyan-brand/20' : i === arr.length - 1 ? 'bg-magenta/30' : 'bg-white/10'}"><b class="w-6 h-6 rounded-full grid place-items-center text-[11px] ${i === 0 ? 'bg-cyan-brand text-ink' : i === arr.length - 1 ? 'bg-magenta text-white' : 'bg-[#7B5CFF] text-white'}">${n}</b>${t}</span>${i < arr.length - 1 ? '<span class="text-white/40">→</span>' : ''}`).join('');
+
+$('#ruta-steps').innerHTML = RUTA.map(([t, d], i) => `
+  <div class="reveal reveal-d${(i % 4) + 1} step rounded-2xl bg-white border border-gray-100 p-6 hover:shadow-[0_20px_50px_-25px_rgba(14,19,36,.3)]">
+    <div class="flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-gradient-to-br from-magenta to-violet-brand text-white grid place-items-center font-heading font-bold text-sm">${i + 1}</span>
+    ${i < RUTA.length - 1 ? '<span class="hidden lg:block flex-1 h-px bg-gradient-to-r from-magenta/50 to-transparent"></span>' : ''}</div>
+    <h3 class="font-heading font-bold mt-4">${t}</h3><p class="text-sm text-ink-2 mt-1.5 leading-relaxed">${d}</p>
+  </div>`).join('');
+
+/* ================= ANIMATIONS ================= */
+const animateCount = el => {
+  const target = +el.dataset.count, dur = 1600, t0 = performance.now();
+  const step = now => {
+    const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3), v = Math.round(target * e);
+    el.textContent = el.dataset.sep ? fmt(v) : v;
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
+const io = new IntersectionObserver(entries => entries.forEach(en => {
+  if (!en.isIntersecting) return;
+  const el = en.target;
+  el.classList.add('in');
+  el.querySelectorAll('[data-count]').forEach(c => { if (!c.dataset.done) { c.dataset.done = 1; animateCount(c); } });
+  el.querySelectorAll('.bar').forEach(b => {
+    const acc = b.closest('.acc');
+    if (acc && !acc.classList.contains('open') && b.closest('.acc-body')) return;
+    setTimeout(() => b.style.width = b.dataset.w + '%', 200);
+  });
+  io.unobserve(el);
+}), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ================= NAV ================= */
+const nav = $('#navInner'), brand = $('#brand'), links = $('#links'), progress = $('#progress');
+const sections = [...document.querySelectorAll('main section[id]')];
+const onScroll = () => {
+  const y = scrollY, solid = y > 60;
+  nav.classList.toggle('bg-white/85', solid); nav.classList.toggle('backdrop-blur-xl', solid);
+  nav.classList.toggle('shadow-[0_10px_40px_-20px_rgba(14,19,36,.35)]', solid);
+  brand.classList.toggle('text-white', !solid); brand.classList.toggle('text-ink', solid);
+  links.classList.toggle('text-white/80', !solid); links.classList.toggle('text-ink-2', solid);
+  progress.style.width = (y / (document.documentElement.scrollHeight - innerHeight)) * 100 + '%';
+  let cur = '';
+  sections.forEach(s => { if (s.getBoundingClientRect().top < 140) cur = s.id; });
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+};
+addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+document.documentElement.classList.add('js');
+</script>
+</body>
+</html>
